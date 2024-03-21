@@ -15,6 +15,7 @@ import CameraModal from "../components/CameraModal/CameraModal";
 export const PatientVisuRecord = ({ navigation }) => {
     const [uriCameraCapture, setUriCameraCapture] = useState(null)
     const [showCameraModal, setShowCameraModal] = useState(false)
+    const [openModal, setOpenModal] = useState(false)
 
     return (
         <ContainerScroll>
@@ -63,7 +64,7 @@ export const PatientVisuRecord = ({ navigation }) => {
 
                     <RowButtonVisu>
                         <View style={{ width: "50%" }}>
-                            <ButtonVisu>
+                            <ButtonVisu onPress={() => setOpenModal(true)}>
                                 <MaterialIcons
                                     name="add-photo-alternate"
                                     size={20}
@@ -89,11 +90,7 @@ export const PatientVisuRecord = ({ navigation }) => {
                 </LinkCancel>
             </ContainerUser>
 
-            <CameraModal
-                visible={showCameraModal}
-                setUriCameraCapture={setUriCameraCapture}
-                setShowCameraModal={setShowCameraModal}
-            />
+            {openModal ? (<CameraModal/>) : (<></>)}
         </ContainerScroll>
     );
 }
