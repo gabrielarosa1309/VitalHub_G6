@@ -90,6 +90,7 @@ export const PatientVisuRecord = ({ navigation }) => {
                 </LinkCancel>
             </ContainerUser>
 
+            {/* Alteração que fez funcionar o modal */}
             {openModal ? (<CameraModal/>) : (<></>)}
         </ContainerScroll>
     );

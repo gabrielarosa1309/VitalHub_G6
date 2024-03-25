@@ -1,16 +1,39 @@
+import { useEffect, useState } from "react";
 import { Container, ContainerScroll } from "../components/Container/Style";
-import { Button, ButtonTxt } from "../components/EntryButton/Style";
+import { Button, ButtonTxt, ExitButton } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
+import { userDecodeToken } from "../utils/Auth";
 
 export const PatientProfile = ({ navigation }) => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
+    async function profileLoad() {
+        const token = await userDecodeToken();
+
+        if (token) {
+            setName(token.name),
+            setEmail(token.email)
+        }
+    }
+
+    async function logout() {
+        await AsyncStorage.removeItem('token');
+        navigation.navigate("Login")
+    }
+
+    useEffect(() => {
+        profileLoad();
+    }, [])
+
     return (
         <Container>
             <ImgProfile source={require("../assets/img/chewie.jpg")} />
 
-            <Title> Chewie </Title>
-            <Subtitle> chewie@email.com </Subtitle>
+            <Title> {name} </Title>
+            <Subtitle> {email} </Subtitle>
 
             <ContainerScroll>
                 <BoxInput>
@@ -43,6 +66,10 @@ export const PatientProfile = ({ navigation }) => {
                 <Button onPress={() => navigation.navigate("EditPatientProfile")}>
                     <ButtonTxt> EDITAR </ButtonTxt>
                 </Button>
+
+                <ExitButton onPress={() => logout()}>
+                    <ButtonTxt> Sair </ButtonTxt>
+                </ExitButton>
 
             </ContainerScroll>
 

@@ -33,3 +33,8 @@ export const ButtonVisu = styled(Button)`
 export const ButtonVisuTxt = styled(ButtonTxt)`
     text-transform: none;
 `
+export const ExitButton = styled(Button)`
+    width: 60%;
+    background-color: #ACABB7;
+
+`

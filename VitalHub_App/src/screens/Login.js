@@ -6,19 +6,31 @@ import { LinkMedium } from "../components/Links/Style";
 import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { GoogleButton, IconGoogleButton, TitleGoogleButton } from "../components/GoogleButton/Style";
 import { CreateAccount, LinkCreateAccount, TextCreateAccount } from "../components/CreateAccount/Style";
-import Home from "./Home";
+import { useState } from "react";
+import api from "../service/service";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const Login = ({ navigation }) => {
-    async function Login() {
-        navigation.replace("Main")
+    const [email, setEmail] = useState('')
+    const [senha, setSenha] = useState('')
+
+    async function LoginApi() {
+        try {
+            const response = await api.post('/Login', {
+                email: email,
+                senha: senha
+            });
+
+            await AsyncStorage.setItem('token', JSON.stringify(response.data))
+            navigation.navigate("Main")
+        } catch (error) {
+            console.error("Erro na chamada da API:", error);
+        }
     }
+    
 
     async function ResetPassword() {
         navigation.navigate("ResetPassword")
-    }
-
-    function name(params) {
-        
     }
 
     return (
@@ -27,15 +39,24 @@ export const Login = ({ navigation }) => {
 
             <Title> Entrar ou criar conta </Title>
 
-            <Input placeholder="Usuário ou E-mail" />
+            <Input
+                placeholder="Usuário ou E-mail"
+                value={email}
+                onChangeText={(txt) => setEmail(txt)}
+            />
 
-            <Input placeholder="Senha" secureTextEntry />
+            <Input
+                placeholder="Senha"
+                secureTextEntry
+                value={senha}
+                onChangeText={(txt) => setSenha(txt)}
+            />
 
             <LinkMedium onPress={() => navigation.navigate("ResetPassword")}>
                 Esqueceu sua senha?
             </LinkMedium>
 
-            <Button onPress={() => Login()}>
+            <Button onPress={() => LoginApi()}>
                 <ButtonTxt> ENTRAR </ButtonTxt>
             </Button>
 
