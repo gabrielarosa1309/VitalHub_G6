@@ -4,7 +4,7 @@ export const ButtonHome = styled.TouchableHighlight`
     align-items: center;
     justify-content: center;
     border-radius: 5px;
-    width: 30%;
+    width: 31%;
     height: 40px;
 
     ${props => props.clickButton ? css`

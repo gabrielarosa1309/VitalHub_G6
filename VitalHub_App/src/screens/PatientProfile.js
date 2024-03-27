@@ -3,14 +3,43 @@ import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userDecodeToken } from "../utils/auth/auth";
+import { useEffect, useState } from "react";
 export const PatientProfile = ({ navigation }) => {
+
+
+async function LogOut() {
+    
+    await AsyncStorage.removeItem('token')
+
+    navigation.navigate('Login')
+
+    // const info = await AsyncStorage.getItem('token')
+    // console.log(info)
+}
+
+async function profileLoad() {
+    
+const data = await userDecodeToken();
+
+setUserData(data)
+}
+
+useEffect(() => {
+
+    profileLoad();
+}, [])
+
+const [userData, setUserData] = useState({})
+
+
     return (
         <Container>
             <ImgProfile source={require("../assets/img/chewie.jpg")} />
 
-            <Title> Chewie </Title>
-            <Subtitle> chewie@email.com </Subtitle>
+            <Title> {userData.name} </Title>
+            <Subtitle> {userData.email} </Subtitle>
 
             <ContainerScroll>
                 <BoxInput>
@@ -42,6 +71,10 @@ export const PatientProfile = ({ navigation }) => {
 
                 <Button onPress={() => navigation.navigate("EditPatientProfile")}>
                     <ButtonTxt> EDITAR </ButtonTxt>
+                </Button>
+
+                <Button onPress={() => LogOut()}>
+                    <ButtonTxt> Sair </ButtonTxt>
                 </Button>
 
             </ContainerScroll>
