@@ -4,36 +4,38 @@ import { Button, ButtonTxt, ExitButton } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
-import { userDecodeToken } from "../utils/Auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userDecodeToken } from "../utils/auth/auth";
 
 export const PatientProfile = ({ navigation }) => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
 
-    async function profileLoad() {
-        const token = await userDecodeToken();
 
-        if (token) {
-            setName(token.name),
-            setEmail(token.email)
-        }
+    async function LogOut() {
+        await AsyncStorage.removeItem('token')
+        navigation.navigate('Login')
+
+        // const info = await AsyncStorage.getItem('token')
+        // console.log(info)
     }
 
-    async function logout() {
-        await AsyncStorage.removeItem('token');
-        navigation.navigate("Login")
+    async function profileLoad() {
+        const data = await userDecodeToken();
+        setUserData(data)
     }
 
     useEffect(() => {
         profileLoad();
     }, [])
 
+    const [userData, setUserData] = useState({})
+
+
     return (
         <Container>
             <ImgProfile source={require("../assets/img/chewie.jpg")} />
 
-            <Title> {name} </Title>
-            <Subtitle> {email} </Subtitle>
+            <Title> {userData.name} </Title>
+            <Subtitle> {userData.email} </Subtitle>
 
             <ContainerScroll>
                 <BoxInput>
@@ -67,9 +69,9 @@ export const PatientProfile = ({ navigation }) => {
                     <ButtonTxt> EDITAR </ButtonTxt>
                 </Button>
 
-                <ExitButton onPress={() => logout()}>
+                <Button onPress={() => LogOut()}>
                     <ButtonTxt> Sair </ButtonTxt>
-                </ExitButton>
+                </Button>
 
             </ContainerScroll>
 

@@ -1,15 +1,17 @@
 import { ContainerCardsList, ContentCard, DataDoctorCard, DoctorImg, DoctorName, DoctorSpecialty, ImgColumn } from "./Style";
 
 export const DoctorCard = ({
-    doctorImg,
+    doctorImg, 
     doctorName,
-    doctorSpecialty
+    doctorSpecialty,
+    selected = true, 
+    medico
 }) => {
     return (
         // container principal
-        <ContainerCardsList>
+        <ContainerCardsList >
 
-            <ContentCard>
+            <ContentCard >
                 {/* conteúdo da direita */}
                 <ImgColumn>
                     <DoctorImg source={doctorImg}/>

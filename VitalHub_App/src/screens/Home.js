@@ -1,7 +1,7 @@
 import CalendarList from "../components/Calendar/Calendar";
 import { Container } from "../components/Container/Style";
 import Header from "../components/Header/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HomeButton } from "../components/HomeButton/HomeButton";
 import { ButtonRowHome } from "../components/HomeButton/Style";
 import { ListComponent } from "../components/List/List";
@@ -10,6 +10,7 @@ import AppointmentModal from "../components/AppointmentModal/AppointmentModal";
 import AppointmentButton from "../components/AppointmentButton/AppointmentButton";
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
+import { userDecodeToken } from "../utils/auth/auth";
 
 const Consultas = [
     { id: 1, situacao: "pendente" },
@@ -19,18 +20,34 @@ const Consultas = [
 
 export const Home = ({ navigation }) => {
 
+    async function profileLoad() {
+        
+        const token = await userDecodeToken()
+        
+
+       setInfo(token)
+    }
+
+
+    const [info, setInfo] = useState({})
+
     const [statusLista, setStatusLista] = useState("pendente");
 
     const [showMedModal, setShowMedModal] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
 
+    useEffect(() => {
+
+        profileLoad();
+    }, [])
+
     return (
         <Container>
 
             <Header
                 img={require("../assets/img/chewie.jpg")}
-                name="Chewie"
+                name={info.name}
                 navigation={navigation}
             />
 

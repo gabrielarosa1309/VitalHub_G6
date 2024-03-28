@@ -8,6 +8,7 @@ export const Button = styled.TouchableOpacity`
     background-color: #496BBA;
     align-items: center;
     justify-content: center;
+    flex-direction: row;
 `
 export const ButtonReset = styled(Button)`
     margin-top: 30px;

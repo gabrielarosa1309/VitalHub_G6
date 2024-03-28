@@ -1,4 +1,4 @@
-import { Container, ContainerLogin } from "../components/Container/Style";
+import { ContainerLogin } from "../components/Container/Style";
 import { Logo } from "../components/Logo/Style";
 import { Title } from "../components/Title/Style";
 import { Input } from "../components/Input/Style";
@@ -13,18 +13,50 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
+    const [errors, setErrors] = useState({ email: '', senha: '' });
+
+    // Função para validar o e-mail
+    const validateEmail = (email) => {
+        let error = '';
+        if (!email) {
+            error = 'E-mail é obrigatório';
+        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            error = 'E-mail inválido';
+        }
+        return error;
+    };
+
+    // Função para validar a senha
+    const validateSenha = (senha) => {
+        let error = '';
+        if (!senha) {
+            error = 'Senha é obrigatória';
+        } else if (senha.length < 6) {
+            error = 'Senha deve ter pelo menos 6 caracteres';
+        }
+        return error;
+    };
 
     async function LoginApi() {
+        const emailError = validateEmail(email);
+        const senhaError = validateSenha(senha);
+        setErrors({ email: emailError, senha: senhaError });
+
+        if (emailError || senhaError) {
+            return;
+        }
+
         try {
             const response = await api.post('/Login', {
                 email: email,
                 senha: senha
             });
 
-            await AsyncStorage.setItem('token', JSON.stringify(response.data))
-            navigation.navigate("Main")
+            await AsyncStorage.setItem('token', JSON.stringify(response.data));
+            navigation.navigate("Main");
         } catch (error) {
             console.error("Erro na chamada da API:", error);
+            Alert.alert("Erro", "Falha ao fazer login. Por favor, tente novamente.");
         }
     }
     
@@ -43,14 +75,18 @@ export const Login = ({ navigation }) => {
                 placeholder="Usuário ou E-mail"
                 value={email}
                 onChangeText={(txt) => setEmail(txt)}
+                style={errors.email ? { borderColor: 'red' } : {}}
             />
+            {errors.email && <Text style={{ color: 'red' }}>{errors.email}</Text>}
 
             <Input
                 placeholder="Senha"
                 secureTextEntry
                 value={senha}
                 onChangeText={(txt) => setSenha(txt)}
+                style={errors.senha ? { borderColor: 'red' } : {}}
             />
+            {errors.senha && <Text style={{ color: 'red' }}>{errors.senha}</Text>}
 
             <LinkMedium onPress={() => navigation.navigate("ResetPassword")}>
                 Esqueceu sua senha?

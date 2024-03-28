@@ -8,32 +8,31 @@ import api from "../service/service";
 import { ListComponent } from "../components/List/List";
 
 export const SelectDoctor = ({ navigation }) => {
-    const [medicosLista, setMedicosLista] = useState([]);
 
-    async function ListarMedicos(){
-        await api.get('/Medicos')
-            .then(response => {
-                setMedicosLista(response.data)
-            }).catch(error => {
-                console.log(error)
-            })
+    const [medicoLista, setMedicoLista] = useState([])
+
+    async function ListarMedicos() {
+        await api.get('/Medicos').then( async response => { await setMedicoLista(response.data); console.log(response.data) }).catch(error => { alert("error")})
     }
 
     useEffect(() => {
-        ListarMedicos();
+        ListarMedicos()
     }, [])
 
     return (
+
         <Container>
             <Title2> Selecionar médico </Title2>
 
             <ListComponent
-                data={medicosLista}
-                keyExtractor={(item) => item.id}
+                data={medicoLista}
+                key={(item) => item.id}
                 renderItem={(medico) => (
-                    <DoctorCard medico={medico.item}/>
+                    <DoctorCard
+                        doctorName={medico.idNavigation.nome}
+                        doctorSpecialty={medico.especialidade.especialidade1}
+                    />
                 )}
-                showsVerticalScrollIndicator={false}
             />
 
             <Button onPress={() => navigation.navigate("SelectDate")}>
@@ -42,7 +41,7 @@ export const SelectDoctor = ({ navigation }) => {
 
             <LinkCancel onPress={() => navigation.navigate("SelectClinic")}>Cancelar</LinkCancel>
 
-        </Container>
+        </Container >
     );
 }
 export default SelectDoctor;
