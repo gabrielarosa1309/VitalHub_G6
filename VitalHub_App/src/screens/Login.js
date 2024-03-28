@@ -16,8 +16,8 @@ import { ErrorText, TextLoader, TextLoaderAlign } from "../components/Loader/Sty
 export const Login = ({ navigation }) => {
 
     const [load, setLoad] = useState(false)
-    const [email, setEmail] = useState("");
-    const [senha, setSenha] = useState("");
+    const [email, setEmail] = useState("henrique@gmail.com");
+    const [senha, setSenha] = useState("123456");
     const [errorMessage, setErrorMessage] = useState(false);
 
 
@@ -37,7 +37,7 @@ if (email.trim() == "" || senha.trim().length < 6) {
         senha: senha
         
     })
-    console.log(response)
+    
     await AsyncStorage.setItem('token', JSON.stringify(response.data))
 
     navigation.navigate('Main')

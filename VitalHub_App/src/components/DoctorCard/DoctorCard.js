@@ -1,25 +1,29 @@
+import { Text } from "react-native";
 import { ContainerCardsList, ContentCard, DataDoctorCard, DoctorImg, DoctorName, DoctorSpecialty, ImgColumn } from "./Style";
 
 export const DoctorCard = ({
-    doctorImg,
-    doctorName,
-    doctorSpecialty
+    img,
+    nome,
+    speciality
 }) => {
     return (
         // container principal
+     
         <ContainerCardsList>
 
             <ContentCard>
                 {/* conteúdo da direita */}
                 <ImgColumn>
-                    <DoctorImg source={doctorImg}/>
+                    <DoctorImg source={img}/>
                 </ImgColumn>
 
                 {/* conteúdo da esquerda */}
                 <DataDoctorCard>
-                    <DoctorName> {doctorName} </DoctorName>
-                    <DoctorSpecialty> {doctorSpecialty} </DoctorSpecialty>
+                    <DoctorName> {nome} </DoctorName>
+                    <DoctorSpecialty> Especialidade {speciality} </DoctorSpecialty>
                 </DataDoctorCard>
+
+           
 
             </ContentCard>
 
