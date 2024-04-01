@@ -9,11 +9,12 @@ import { CreateAccount, LinkCreateAccount, TextCreateAccount } from "../componen
 import { useState } from "react";
 import api from "../service/service";
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Text, Alert } from "react-native";
 
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('')
     const [senha, setSenha] = useState('')
-    const [errors, setErrors] = useState({ email: '', senha: '' });
+    const [errorMessage, setErrorMessage] = useState(''); 
 
     // Função para validar o e-mail
     const validateEmail = (email) => {
@@ -40,9 +41,9 @@ export const Login = ({ navigation }) => {
     async function LoginApi() {
         const emailError = validateEmail(email);
         const senhaError = validateSenha(senha);
-        setErrors({ email: emailError, senha: senhaError });
 
         if (emailError || senhaError) {
+            setErrorMessage("Email ou senha inválidos"); 
             return;
         }
 
@@ -59,11 +60,10 @@ export const Login = ({ navigation }) => {
             Alert.alert("Erro", "Falha ao fazer login. Por favor, tente novamente.");
         }
     }
-    
 
-    async function ResetPassword() {
-        navigation.navigate("ResetPassword")
-    }
+    // async function ResetPassword() {
+    //     navigation.navigate("ResetPassword")
+    // }
 
     return (
         <ContainerLogin>
@@ -75,22 +75,22 @@ export const Login = ({ navigation }) => {
                 placeholder="Usuário ou E-mail"
                 value={email}
                 onChangeText={(txt) => setEmail(txt)}
-                style={errors.email ? { borderColor: 'red' } : {}}
+                style={errorMessage ? { borderColor: 'red' } : {}}
             />
-            {errors.email && <Text style={{ color: 'red' }}>{errors.email}</Text>}
 
             <Input
                 placeholder="Senha"
                 secureTextEntry
                 value={senha}
                 onChangeText={(txt) => setSenha(txt)}
-                style={errors.senha ? { borderColor: 'red' } : {}}
+                style={errorMessage ? { borderColor: 'red' } : {}}
             />
-            {errors.senha && <Text style={{ color: 'red' }}>{errors.senha}</Text>}
 
             <LinkMedium onPress={() => navigation.navigate("ResetPassword")}>
                 Esqueceu sua senha?
             </LinkMedium>
+
+            {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
 
             <Button onPress={() => LoginApi()}>
                 <ButtonTxt> ENTRAR </ButtonTxt>
