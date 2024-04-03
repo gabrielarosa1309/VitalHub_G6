@@ -1,41 +1,63 @@
-import { Container } from "../components/Container/Style"; 
-import { Button, ButtonTxt } from "../components/EntryButton/Style";
+import { useEffect, useState } from "react";
+import { Container, ContainerScroll } from "../components/Container/Style"; import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
-import { SelectCard } from "../components/SelectCard/SelectCard";
+import { ListComponent } from "../components/List/List";
+
 import { Title2 } from "../components/Title/Style";
 
+import api from "../service/service";
+import { ClinicCardSelect } from "../components/ClinicCardSelect/ClinicCardSelect";
+
+
 export const SelectClinic = ({ navigation }) => {
+
+    //State Listagem API Clinicas 
+    const [clinicaLista, setClinicaLista] = useState([])
+
+    //State para select de borda do card Medico
+    const [selectClinic, setSelectClinic] = useState(false)
+
+    //State para confirmar o id vindo da api para select do card Medico
+    const [idConfirm, setIdConfirm] = useState()
+
+    async function ListarClinicas() {
+
+        try {
+            const resApi = await api.get("/Clinica/ListarTodas")
+            setClinicaLista(resApi.data)
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+
+    useEffect(() => {
+
+        ListarClinicas()
+    }, [])
     return (
         <Container>
             <Title2> Selecionar clínica </Title2>
 
-                <SelectCard
-                    clinicName="Clínica Natureh"
-                    clinicAddress="São Paulo, SP"
-                    rate="4,5"
-                    disponibility="Seg-Sex"
-                />
 
-                <SelectCard
-                    clinicName="Diamond Pró-Mulher"
-                    clinicAddress="São Paulo, SP"
-                    rate="4,8"
-                    disponibility="Seg-Sex"
-                />
+            <ListComponent
+                data={clinicaLista}
+                key={(item) => item.id}
+                renderItem={({ item }) => (
 
-                <SelectCard
-                    clinicName="Clinica Villa Lobos"
-                    clinicAddress="Taboão, SP"
-                    rate="4,2"
-                    disponibility="Seg-Sab"
-                />
-
-                <SelectCard
-                    clinicName="SP Oncologia Clínica"
-                    clinicAddress="Taboão, SP"
-                    rate="4,2"
-                    disponibility="Seg-Sab"
-                />
+                    <ClinicCardSelect
+                        name={item.nomeFantasia}
+                        adress={item.endereco.logradouro}
+                        rate={"5"}
+                        disponibility={"Seg-Sex"}
+                        clickButton={selectClinic}
+                        onPress={() => { setSelectClinic(true); setIdConfirm(item.id) }}
+                        index={idConfirm}
+                        clinicId={item.id}
+                    />
+                )} />
 
             <Button onPress={() => navigation.navigate("SelectDoctor")}>
                 <ButtonTxt> CONTINUAR </ButtonTxt>

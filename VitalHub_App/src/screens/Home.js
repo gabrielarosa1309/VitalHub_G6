@@ -23,34 +23,37 @@ const Consultas = [
 
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
-
     const [info, setInfo] = useState({})
-    const [statusLista, setStatusLista] = useState("pendente");
+    const [statusLista, setStatusLista] = useState("Pendentes");
     const [showMedModal, setShowMedModal] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
     const [dataConsulta, setDataConsulta] = useState('');
     const [consultas, setConsultas] = useState('');
+    const [consultaSelecionada, setConsultaSelecionada] = useState('');
+
 
     async function profileLoad() {
         const token = await userDecodeToken();
         if (token) {
             setProfile(token)
             setInfo(token)
+
+            setDataConsulta( moment().format("YYYY-MM-DD") )
         }
     }
 
     async function ListarConsultas() {
         const url = (profile.role == 'Medico' ? "Medicos" : "Pacientes")
-        console.log( `/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}` )
+        console.log(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
-        .then( response => {
-            setConsultas(response.data);
-            console.log(response.data)
-        }).catch(error => {
-            console.log(error);
-        })
+            .then(response => {
+                setConsultas(response.data);
+                console.log(response.data)
+            }).catch(error => {
+                console.log(error);
+            })
     }
 
     useEffect(() => {
@@ -63,6 +66,18 @@ export const Home = ({ navigation }) => {
         }
     }, [dataConsulta])
 
+    function MostrarModal(modal, consulta) {
+        setConsultaSelecionada(consulta)
+        console.log('home')
+        console.log(consulta)
+        
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        } else {
+            setShowMedModal(true)
+        }
+    }
+
     return (
         <Container>
 
@@ -72,7 +87,7 @@ export const Home = ({ navigation }) => {
                 navigation={navigation}
             />
 
-            <CalendarList 
+            <CalendarList
                 setDataConsulta={setDataConsulta}
             />
 
@@ -80,37 +95,42 @@ export const Home = ({ navigation }) => {
 
                 <HomeButton
                     textButton={"Agendadas"}
-                    clickButton={statusLista === "pendente"}
-                    onPress={() => setStatusLista("pendente")}
+                    clickButton={statusLista === "Pendentes"}
+                    onPress={() => setStatusLista("Pendentes")}
                 />
 
                 <HomeButton
                     textButton={"Realizadas"}
-                    clickButton={statusLista === "realizado"}
-                    onPress={() => setStatusLista("realizado")}
+                    clickButton={statusLista === "Realizados"}
+                    onPress={() => setStatusLista("Realizados")}
                 />
 
 
                 <HomeButton
                     textButton={"Canceladas"}
-                    clickButton={statusLista === "cancelado"}
-                    onPress={() => setStatusLista("cancelado")}
+                    clickButton={statusLista === "Cancelados"}
+                    onPress={() => setStatusLista("Cancelados")}
                 />
 
 
             </ButtonRowHome>
 
             <ListComponent
-                data={Consultas}
+                data={consultas}
                 keyExtractor={(item) => item.id}
-
                 renderItem={({ item }) =>
-                    statusLista == item.situacao && (
+                    statusLista == item.situacao.situacao && (
                         <PatientAppCard
                             situacao={item.situacao}
-                            onPressMedModal={() => setShowMedModal(true)}
-                            onPressCancel={() => setShowModalCancel(true)}
                             navigation={navigation}
+
+                            roleUsuario={profile.role}
+                            dataConsulta={item.dataConsulta}
+                            prioridade={item.prioridade.prioridade}
+                            usuarioConsulta={ profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
+
+                            onPressMedModal={() => MostrarModal('prontuario', item)}
+                            onPressCancel={() => MostrarModal('cancelar', item)}
                         />
                     )
                 }
@@ -127,12 +147,16 @@ export const Home = ({ navigation }) => {
                 visible={showMedModal}
                 setShowMedModal={setShowMedModal}
                 navigation={navigation}
+                roleUsuario={profile.role}
+                situacao={statusLista}
+                consulta={consultaSelecionada}
             />
 
             <AppointmentModal
                 visible={showModalApp}
                 setShowModalApp={setShowModalApp}
                 navigation={navigation}
+                
             />
 
         </Container>

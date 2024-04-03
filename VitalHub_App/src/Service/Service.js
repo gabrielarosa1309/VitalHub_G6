@@ -2,7 +2,7 @@ import axios from "axios";
 
 const portalApi = '4466';
 
-const ip = "192.168.21.125";
+const ip = "192.168.21.53";
 
 const apiUrlLocal = `http://${ip}:${portalApi}/api`;
 

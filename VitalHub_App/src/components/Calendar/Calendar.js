@@ -8,7 +8,8 @@ import { useFonts, MontserratAlternates_600SemiBold } from '@expo-google-fonts/m
 import { StyledCalendarStrip } from "./Style";
 
 //component CalendarList
-const CalendarList = () => {
+const CalendarList = ({setDataConsulta}) => {
+
 
     //hook useFonts
     const [fontsLoaded, fontsError] = useFonts({
@@ -57,6 +58,7 @@ const CalendarList = () => {
     //retorna o componente StyleCalendarStrip
     return (
       <StyledCalendarStrip
+        onDateSelected={date => setDataConsulta(moment(date).format("YYYY-MM-DD"))}
         // animação e seleção de cada data
         calendarAnimation={{ type: "sequence", duration: 30 }}
         daySelectionAnimation={ styles.selectedAnimationStyle }
