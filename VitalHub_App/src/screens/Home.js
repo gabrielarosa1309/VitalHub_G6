@@ -11,6 +11,9 @@ import AppointmentButton from "../components/AppointmentButton/AppointmentButton
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
+import { UserIcon } from "../components/Header/Style";
+import moment from "moment";
+import api from "../service/service";
 
 const Consultas = [
     { id: 1, situacao: "pendente" },
@@ -19,28 +22,46 @@ const Consultas = [
 ]
 
 export const Home = ({ navigation }) => {
-
-    async function profileLoad() {
-        
-        const token = await userDecodeToken()
-        
-
-       setInfo(token)
-    }
-
+    const [profile, setProfile] = useState({})
 
     const [info, setInfo] = useState({})
-
     const [statusLista, setStatusLista] = useState("pendente");
-
     const [showMedModal, setShowMedModal] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
+    const [dataConsulta, setDataConsulta] = useState('');
+    const [consultas, setConsultas] = useState('');
+
+    async function profileLoad() {
+        const token = await userDecodeToken();
+        if (token) {
+            setProfile(token)
+            setInfo(token)
+        }
+    }
+
+    async function ListarConsultas() {
+        const url = (profile.role == 'Medico' ? "Medicos" : "Pacientes")
+        console.log( `/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}` )
+
+        await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
+        .then( response => {
+            setConsultas(response.data);
+            console.log(response.data)
+        }).catch(error => {
+            console.log(error);
+        })
+    }
 
     useEffect(() => {
-
         profileLoad();
     }, [])
+
+    useEffect(() => {
+        if (dataConsulta != '') {
+            ListarConsultas();
+        }
+    }, [dataConsulta])
 
     return (
         <Container>
@@ -51,7 +72,9 @@ export const Home = ({ navigation }) => {
                 navigation={navigation}
             />
 
-            <CalendarList />
+            <CalendarList 
+                setDataConsulta={setDataConsulta}
+            />
 
             <ButtonRowHome>
 
