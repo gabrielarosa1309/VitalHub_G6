@@ -15,8 +15,7 @@ async function LogOut() {
 
     navigation.navigate('Login')
 
-    // const info = await AsyncStorage.getItem('token')
-    // console.log(info)
+
 }
 
 async function profileLoad() {

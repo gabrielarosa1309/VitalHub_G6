@@ -12,32 +12,37 @@ import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import api from "../Service/Service";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const Home = ({ navigation }) => {
 
     //Listagem Api Consultas
     const [listaConsultas, setListaConsultas] = useState([])
 
-    async function ListarConsultas() {
+    // async function ListarConsultas() {
 
-        try {
-            const resApi = await api.get("/Consultas")
-         
+    //     try {
+    //         const token = JSON.parse( await AsyncStorage.getItem("token") ).token
+           
+    //         console.log("token");
+    //         console.log(token);
 
-        setListaConsultas(resApi.data)
+    //         const resApi = await api.get("/Consultas", {
+    //             headers: {
 
-        } catch (error) {
-            console.log(error);
-        }
+    //                 "Authorization": `Bearer ${token}`
+    //             }
+    //         })
+    //         console.log(resApi.data);
+    //     setListaConsultas(resApi.data)
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
        
-    }
+    // }
 
 
-useEffect(() => {
-
-ListarConsultas()
-
-}, [])
 
     async function profileLoad() {
         
@@ -45,6 +50,7 @@ ListarConsultas()
         
 
        setInfo(token)
+    
     }
 
 
@@ -59,10 +65,22 @@ ListarConsultas()
     useEffect(() => {
 
         profileLoad();
+    
+        
     }, [])
 
+    useEffect(() => {
+
+        ListarConsultas()
+        
+        
+        }, [])
+        
+
     return (
+        
         <Container>
+          
 
             <Header
                 img={require("../assets/img/chewie.jpg")}
