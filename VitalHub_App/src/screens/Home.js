@@ -11,14 +11,33 @@ import AppointmentButton from "../components/AppointmentButton/AppointmentButton
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
-
-const Consultas = [
-    { id: 1, situacao: "pendente" },
-    { id: 4, situacao: "realizado" },
-    { id: 8, situacao: "cancelado" }
-]
+import api from "../Service/Service";
 
 export const Home = ({ navigation }) => {
+
+    //Listagem Api Consultas
+    const [listaConsultas, setListaConsultas] = useState([])
+
+    async function ListarConsultas() {
+
+        try {
+            const resApi = await api.get("/Consultas")
+         
+
+        setListaConsultas(resApi.data)
+
+        } catch (error) {
+            console.log(error);
+        }
+       
+    }
+
+
+useEffect(() => {
+
+ListarConsultas()
+
+}, [])
 
     async function profileLoad() {
         
@@ -78,7 +97,7 @@ export const Home = ({ navigation }) => {
             </ButtonRowHome>
 
             <ListComponent
-                data={Consultas}
+                data={listaConsultas}
                 keyExtractor={(item) => item.id}
 
                 renderItem={({ item }) =>

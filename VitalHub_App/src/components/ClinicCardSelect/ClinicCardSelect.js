@@ -1,21 +1,18 @@
+import { AlignBoxSelectDoctorComponents, AlignSelectDoctorText, BoxSelectDoctorN, BoxSelectDoctorName, BoxSelectDoctorType, ButtonCard, ClinicAddress, ClinicName, ClockCard, ContentCard, DataClinicCard, IconsColumn, Rate, SelectDoctorImage, TextBold, TextBoldRate } from "./Style"
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import { ClinicAddress, ClinicName, ClockCard, ContainerCardsList, ContentCard, DataClinicCard, IconsColumn, Rate, TextBold, TextBoldRate } from './Style';
 
-export const SelectCard = ({
-    clinicName,
-    clinicAddress,
-    rate,
-    disponibility
-}) => {
-    return (
-        // container principal
-        <ContainerCardsList>
 
-            <ContentCard>
+export const ClinicCardSelect = ({name, adress, rate, disponibility, clinicId, index, onPress, clickButton = false}) => {return(
+
+<ButtonCard clickButton={clickButton} onPress={onPress}>
+<BoxSelectDoctorN clickButton={clickButton} clinicId={clinicId} index={index}>
+    <AlignBoxSelectDoctorComponents>
+
+        <ContentCard>
                 {/* conteúdo da direita */}
                 <DataClinicCard>
-                    <ClinicName> {clinicName} </ClinicName>
-                    <ClinicAddress> {clinicAddress} </ClinicAddress>
+                    <ClinicName>{name}</ClinicName>
+                    <ClinicAddress>{adress}</ClinicAddress>
                 </DataClinicCard>
 
                 {/* conteúdo da esquerda */}
@@ -41,7 +38,8 @@ export const SelectCard = ({
                     </ClockCard>
                 </IconsColumn>
             </ContentCard>
+    </AlignBoxSelectDoctorComponents>
+</BoxSelectDoctorN>
+</ButtonCard>
 
-        </ContainerCardsList>
-    );
-};
+)}

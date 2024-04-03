@@ -2,7 +2,7 @@ import { AlignBoxSelectDoctorComponents, AlignSelectDoctorText, BoxSelectDoctorN
 
 
 
-export const DoctorCardSelect = ({nome, especialidade, doctorId, index, onPress, clickButton = false}) => {return(
+export const DoctorCardSelect = ({name, especialidade, doctorId, index, onPress, clickButton = false}) => {return(
 
 <ButtonCard clickButton={clickButton} onPress={onPress}>
 <BoxSelectDoctorN clickButton={clickButton} doctorId={doctorId} index={index}>
@@ -11,7 +11,7 @@ export const DoctorCardSelect = ({nome, especialidade, doctorId, index, onPress,
         <SelectDoctorImage source={require("../../assets/img/SelectDoctor.png")}/>
 
         <AlignSelectDoctorText>
-            <BoxSelectDoctorName>{nome}</BoxSelectDoctorName>
+            <BoxSelectDoctorName>{name}</BoxSelectDoctorName>
             <BoxSelectDoctorType>{especialidade}</BoxSelectDoctorType>
         </AlignSelectDoctorText>
     </AlignBoxSelectDoctorComponents>

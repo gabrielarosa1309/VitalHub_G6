@@ -13,7 +13,7 @@ import { DoctorCardSelect } from "../components/DoctorCardSelect/DoctorCardSelec
 
 export const SelectDoctor = ({ navigation }) => {
 
-    const [teste, setTeste] = useState({})
+    //State Listagem API Medicos
     const [medicoLista, setMedicoLista] = useState([])
 
     //State para select de borda do card Medico
@@ -28,14 +28,8 @@ export const SelectDoctor = ({ navigation }) => {
         try {
             const resApi = await api.get("/Medicos")
 
-            console.log("resposta da requisicao::::::::::::::");
-            console.log(resApi);
-            console.log("dados da requisicao::::::::::::::");
-            console.log(resApi.data);
-
             setMedicoLista(resApi.data)
 
-        
         } catch (error) {
             console.log(error);
         }
@@ -63,7 +57,7 @@ export const SelectDoctor = ({ navigation }) => {
                 renderItem={(item) => (
 
                     <DoctorCardSelect
-                        nome={item.item.idNavigation.nome}
+                        name={item.item.idNavigation.nome}
                         especialidade={item.item.especialidade.especialidade1}
                         clickButton={selectDoctor}
                         onPress={() => {setSelectDoctor(true); setIdConfirm(item.item.id)}}
