@@ -9,7 +9,6 @@ import { userDecodeToken } from "../utils/auth/auth";
 
 export const PatientProfile = ({ navigation }) => {
 
-
     async function LogOut() {
         await AsyncStorage.removeItem('token')
         navigation.navigate('Login')

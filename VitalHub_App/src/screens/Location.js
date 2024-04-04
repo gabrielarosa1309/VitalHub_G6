@@ -1,44 +1,67 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "../components/Container/Style";
 import { ImgLocal } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Map } from "../components/Map/Map";
 import { Subtitle, Title, TitleInput, TitleLocation } from "../components/Title/Style";
+import { ActivityIndicator } from "react-native";
+import api from "../service/service";
 
 export const Location = ({ navigation, route }) => {
+    const [clinica, setClinica] = useState(null);
+
     useEffect(() => {
-        console.log(route)
-    }, [])
+        if (clinica == null) {
+            BuscarClinica()
+        }
+    }, [clinica])
+
+    async function BuscarClinica() {
+        await api.get(`/Clinica/BuscarPorId?id=${route.params.clinica}`)
+            .then(response => {
+                setClinica(response.data)
+                console.log(response.data)
+            }).catch(error => {
+                console.log(error)
+            })
+    }
 
     return (
-        
         <Container>
-            <Map/>
+            {
+                clinica != null ? (
+                    <>
+                        <Map />
 
-            <TitleLocation> Clínica Natureh </TitleLocation>
-            <Subtitle> São Paulo, SP </Subtitle>
+                        <TitleLocation> {clinica.nomeFantasia} </TitleLocation>
+                        <Subtitle> {clinica.endereco.logradouro} </Subtitle>
 
-            <BoxInput>
-                <TitleInput> Endereço </TitleInput>
-                <InputBlock>Rua Vicenso Silva, 987</InputBlock>
-            </BoxInput>
+                        <BoxInput>
+                            <TitleInput> Endereço </TitleInput>
+                            <InputBlock> {clinica.endereco.logradouro} </InputBlock>
+                        </BoxInput>
 
-            <DirectionRow>
-                <BoxInputRow>
-                    <TitleInput> Número </TitleInput>
-                    <InputBodyRow>578</InputBodyRow>
-                </BoxInputRow>
+                        <DirectionRow>
+                            <BoxInputRow>
+                                <TitleInput> Número </TitleInput>
+                                <InputBodyRow> {clinica.endereco.numero} </InputBodyRow>
+                            </BoxInputRow>
 
-                <BoxInputRow>
-                    <TitleInput> Bairro </TitleInput>
-                    <InputBodyRow>Moema-SP</InputBodyRow>
-                </BoxInputRow>
-            </DirectionRow>
+                            <BoxInputRow>
+                                <TitleInput> Bairro </TitleInput>
+                                <InputBodyRow>{clinica.endereco.numero}</InputBodyRow>
+                            </BoxInputRow>
+                        </DirectionRow>
 
-            <LinkCancel onPress={() => navigation.replace("Main")}>
-                Cancelar
-            </LinkCancel>
+                        <LinkCancel onPress={() => navigation.replace("Main")}>
+                            Cancelar
+                        </LinkCancel>
+                    </>
+                ) : (
+                    <ActivityIndicator />
+                )
+            }
         </Container>
     );
 }
