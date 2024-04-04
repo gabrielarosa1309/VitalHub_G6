@@ -24,12 +24,13 @@ const Consultas = [
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
     const [info, setInfo] = useState({})
-    const [statusLista, setStatusLista] = useState("Pendentes");
+    const [statusLista, setStatusLista] = useState('');
     const [showMedModal, setShowMedModal] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
     const [dataConsulta, setDataConsulta] = useState('');
     const [consultas, setConsultas] = useState('');
+    const [time, setTime] = useState('');
     const [consultaSelecionada, setConsultaSelecionada] = useState('');
 
 
@@ -45,7 +46,6 @@ export const Home = ({ navigation }) => {
 
     async function ListarConsultas() {
         const url = (profile.role == 'Medico' ? "Medicos" : "Pacientes")
-        console.log(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
@@ -68,8 +68,6 @@ export const Home = ({ navigation }) => {
 
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
-        console.log('home')
-        console.log(consulta)
         
         if (modal == 'cancelar') {
             setShowModalCancel(true)
@@ -92,7 +90,6 @@ export const Home = ({ navigation }) => {
             />
 
             <ButtonRowHome>
-
                 <HomeButton
                     textButton={"Agendadas"}
                     clickButton={statusLista === "Pendentes"}
@@ -111,8 +108,6 @@ export const Home = ({ navigation }) => {
                     clickButton={statusLista === "Cancelados"}
                     onPress={() => setStatusLista("Cancelados")}
                 />
-
-
             </ButtonRowHome>
 
             <ListComponent
@@ -121,13 +116,14 @@ export const Home = ({ navigation }) => {
                 renderItem={({ item }) =>
                     statusLista == item.situacao.situacao && (
                         <PatientAppCard
-                            situacao={item.situacao}
+                            situacao={item.situacao.situacao}
                             navigation={navigation}
 
                             roleUsuario={profile.role}
                             dataConsulta={item.dataConsulta}
                             prioridade={item.prioridade.prioridade}
                             usuarioConsulta={ profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
+                            time={item.dataConsulta}
 
                             onPressMedModal={() => MostrarModal('prontuario', item)}
                             onPressCancel={() => MostrarModal('cancelar', item)}

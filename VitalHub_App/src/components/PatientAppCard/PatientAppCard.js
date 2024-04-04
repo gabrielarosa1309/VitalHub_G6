@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import moment from "moment";
 import {
   ButtonCard,
   ButtonText,
@@ -23,11 +24,12 @@ export const PatientAppCard = ({
   navigation,
   roleUsuario,
   prioridade,
+  time,
   usuarioConsulta
 }) => {
   const [showMedModal, setShowMedModal] = useState(false);
 
-  
+
 
   return (
     // container principal
@@ -65,7 +67,7 @@ export const PatientAppCard = ({
             />
 
             <TextBold situacao={situacao} color={"#49B3BA"}>
-              14:00
+              {moment(time).format("hh:mm")}
             </TextBold>
           </ClockCard>
 

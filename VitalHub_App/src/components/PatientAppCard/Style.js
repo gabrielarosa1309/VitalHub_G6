@@ -52,12 +52,12 @@ export const ClockCard = styled.View`
     padding: 4px 23px;
     gap: 6px;
     border-radius: 5px;
-    background-color: ${(props) => props.situacao == "pendente" ? "#E8FCFD" : "#F1F0F5"};
+    background-color: ${(props) => props.situacao== "Pendentes" ? "#E8FCFD" : "#F1F0F5"};
 `
 export const ButtonCard = styled.TouchableOpacity`
 
 `
 export const ButtonText = styled.Text`
     font-family: "Quicksand_600SemiBold";
-    color: ${(props) => props.situacao == "pendente" ? "#c81d25" : "#344f8f"};
+    color: ${(props) => props.situacao == "Pendentes" ? "#c81d25" : "#344f8f"};
 `
