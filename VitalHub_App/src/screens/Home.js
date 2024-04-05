@@ -13,11 +13,10 @@ import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import api from "../Service/Service";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment";
+import { UserIcon } from "../components/Header/Style";
 
-export const Home = ({ navigation }) => {
-
-    //Listagem Api Consultas
-    const [listaConsultas, setListaConsultas] = useState([])
+    
 
     // async function ListarConsultas() {
 
@@ -42,28 +41,53 @@ export const Home = ({ navigation }) => {
        
     // }
 
-
-
-    async function profileLoad() {
-        
-        const token = await userDecodeToken()
-        
-
-       setInfo(token)
-    
-    }
-
-
+export const Home = ({ navigation }) => {
+    const [profile, setProfile] = useState({})
     const [info, setInfo] = useState({})
-
-    const [statusLista, setStatusLista] = useState("pendente");
-
+    const [statusLista, setStatusLista] = useState('');
     const [showMedModal, setShowMedModal] = useState(false);
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
+    const [dataConsulta, setDataConsulta] = useState('');
+    const [consultas, setConsultas] = useState([]);
+    const [time, setTime] = useState('');
+    const [consultaSelecionada, setConsultaSelecionada] = useState('');
+
+    //State para armazenar informacoes dos cards para atualizar os status
+    const [putId, setPutId] = useState("");
+
+  
+
+    async function profileLoad() {
+        const token = await userDecodeToken();
+        if (token) {
+            setProfile(token)
+            setInfo(token)
+
+            setDataConsulta( moment().format("YYYY-MM-DD") )
+        }
+    }
+
+    async function ListarConsultas() {
+        const url = (profile.role == 'Medico' ? "Medicos" : "Pacientes")
+
+        await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
+            .then(response => {
+                setConsultas(response.data);
+                console.log(response.data)
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
+    async function CancelConsult() {
+       await api.put(`/Consultas/Status`, {id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5"}).then(response => console.log(response.status))
+            .catch(error => {
+                console.log(error);
+            })
+    }
 
     useEffect(() => {
-
         profileLoad();
     
         
@@ -71,11 +95,22 @@ export const Home = ({ navigation }) => {
 
     useEffect(() => {
 
-        ListarConsultas()
+       
         
+        if (dataConsulta != '') {
+            ListarConsultas();
+        }
+        }, [dataConsulta])
+
+    function MostrarModal(modal, consulta) {
+        setConsultaSelecionada(consulta)
         
-        }, [])
-        
+        if (modal == 'cancelar') {
+            setShowModalCancel(true)
+        } else {
+            setShowMedModal(true)
+        }
+    }
 
     return (
         
@@ -88,43 +123,49 @@ export const Home = ({ navigation }) => {
                 navigation={navigation}
             />
 
-            <CalendarList />
+            <CalendarList
+                setDataConsulta={setDataConsulta}
+            />
 
             <ButtonRowHome>
-
                 <HomeButton
                     textButton={"Agendadas"}
-                    clickButton={statusLista === "pendente"}
-                    onPress={() => setStatusLista("pendente")}
+                    clickButton={statusLista === "Pendentes"}
+                    onPress={() => setStatusLista("Pendentes")}
                 />
 
                 <HomeButton
                     textButton={"Realizadas"}
-                    clickButton={statusLista === "realizado"}
-                    onPress={() => setStatusLista("realizado")}
+                    clickButton={statusLista === "Realizados"}
+                    onPress={() => setStatusLista("Realizados")}
                 />
 
 
                 <HomeButton
                     textButton={"Canceladas"}
-                    clickButton={statusLista === "cancelado"}
-                    onPress={() => setStatusLista("cancelado")}
+                    clickButton={statusLista === "Cancelados"}
+                    onPress={() => setStatusLista("Cancelados")}
                 />
-
-
             </ButtonRowHome>
 
             <ListComponent
-                data={listaConsultas}
+                data={consultas}
                 keyExtractor={(item) => item.id}
-
                 renderItem={({ item }) =>
-                    statusLista == item.situacao && (
+                    statusLista == item.situacao.situacao && (
                         <PatientAppCard
-                            situacao={item.situacao}
-                            onPressMedModal={() => setShowMedModal(true)}
-                            onPressCancel={() => setShowModalCancel(true)}
+                            situacao={item.situacao.situacao}
                             navigation={navigation}
+
+                            roleUsuario={profile.role}
+                            dataConsulta={item.dataConsulta} 
+                            prioridade={item.prioridade.prioridade}
+                            usuarioConsulta={ profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
+                            time={item.dataConsulta}
+                            
+                            onPressMedModal={() => MostrarModal('prontuario', item)}
+                            onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
+                            
                         />
                     )
                 }
@@ -133,6 +174,8 @@ export const Home = ({ navigation }) => {
             <AppointmentButton onPress={() => setShowModalApp(true)} />
 
             <CancelModal
+            onPressConfirm={() => CancelConsult()}
+                
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
@@ -141,12 +184,16 @@ export const Home = ({ navigation }) => {
                 visible={showMedModal}
                 setShowMedModal={setShowMedModal}
                 navigation={navigation}
+                roleUsuario={profile.role}
+                situacao={statusLista}
+                consulta={consultaSelecionada}
             />
 
             <AppointmentModal
                 visible={showModalApp}
                 setShowModalApp={setShowModalApp}
                 navigation={navigation}
+                
             />
 
         </Container>

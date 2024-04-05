@@ -17,11 +17,11 @@ align-items: center;
 justify-content: center;
 margin: 15px 0px 15px 0px;
 ${(props) =>
-    props.clickButton === true && props.clinicId == props.index
-      ? css`
+        props.clickButton === true && props.clinicId == props.index
+            ? css`
           border: 2px solid #496BBA;
         `
-      : css`
+            : css`
           border: none;
         `}
 `;
@@ -45,7 +45,7 @@ font-size: 16px;
 font-family: 'MontserratAlternates_600SemiBold';
 `
 
-export const BoxSelectDoctorType  = styled.Text`
+export const BoxSelectDoctorType = styled.Text`
 color: #8C8A97;
 font-size: 14px;
 font-family: 'Quicksand_500Medium';`

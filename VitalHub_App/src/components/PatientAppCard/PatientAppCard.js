@@ -1,4 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
+import moment from "moment";
 import {
   ButtonCard,
   ButtonText,
@@ -17,12 +18,18 @@ import MedModal from "../MedModal/MedModal";
 import { useState } from "react";
 
 export const PatientAppCard = ({
-  situacao = "pendente",
+  situacao,
   onPressCancel,
   onPressMedModal,
-  navigation
+  navigation,
+  roleUsuario,
+  prioridade,
+  time,
+  usuarioConsulta
 }) => {
   const [showMedModal, setShowMedModal] = useState(false);
+
+
 
   return (
     // container principal
@@ -46,8 +53,8 @@ export const PatientAppCard = ({
           <ProfileName>Dr. Claudio</ProfileName>
 
           <ProfileData>
-            <TextAge>22 anos</TextAge>
-            <TextBold>Rotina</TextBold>
+            <TextAge>{roleUsuario == "Medico" ? usuarioConsulta.dataNascimento : usuarioConsulta.crm}</TextAge>
+            <TextBold>{prioridade == 0 ? "Rotina" : prioridade == 1 ? "Exame" : "Rotina"}</TextBold>
           </ProfileData>
         </DataProfileCard>
 
@@ -56,21 +63,21 @@ export const PatientAppCard = ({
             <AntDesign
               name="clockcircle"
               size={14}
-              color={situacao == "pendente" ? "#49B3BA" : "#8C8A97"}
+              color={situacao == "Pendentes" ? "#49B3BA" : "#8C8A97"}
             />
 
             <TextBold situacao={situacao} color={"#49B3BA"}>
-              14:00
+              {moment(time).format("hh:mm")}
             </TextBold>
           </ClockCard>
 
           {/* valida e mostra o tipo de botão conforme a situação */}
 
           {
-            situacao == "cancelado" ? (
+            situacao == "Cancelados" ? (
               <>
               </>
-            ) : situacao == "pendente" ? (
+            ) : situacao == "Pendentes" ? (
               <ButtonCard onPress={onPressCancel}>
                 <ButtonText situacao={situacao}>Cancelar</ButtonText>
               </ButtonCard>

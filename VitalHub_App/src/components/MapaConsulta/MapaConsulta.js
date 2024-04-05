@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react';
 import MapViewDirections from 'react-native-maps-directions';
 import { mapskey } from '../../utils/apiKey';
 
-export const Map = () => {
+export const MapaConsulta = () => {
     const mapReference = useRef(null)
 
     const [initialPosition, setInitialPosition] = useState(null);

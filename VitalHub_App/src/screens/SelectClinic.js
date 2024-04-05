@@ -11,48 +11,41 @@ import { ClinicCardSelect } from "../components/ClinicCardSelect/ClinicCardSelec
 
 export const SelectClinic = ({ navigation }) => {
 
-
     //State Listagem API Clinicas 
     const [clinicaLista, setClinicaLista] = useState([])
 
-      //State para select de borda do card Medico
-      const [selectClinic, setSelectClinic] = useState(false)
+    //State para select de borda do card Medico
+    const [selectClinic, setSelectClinic] = useState(false)
 
-      //State para confirmar o id vindo da api para select do card Medico
-      const [idConfirm, setIdConfirm] = useState()
+    //State para confirmar o id vindo da api para select do card Medico
+    const [idConfirm, setIdConfirm] = useState()
 
-    async function ListarClinicas(){
+    async function ListarClinicas() {
 
         try {
             const resApi = await api.get("/Clinica/ListarTodas")
-         
-
-        setClinicaLista(resApi.data)
+            setClinicaLista(resApi.data)
 
         } catch (error) {
             console.log(error);
         }
-       
+
     }
 
 
-useEffect(() => {
+    useEffect(() => {
 
-ListarClinicas()
-
-}, [])
-
-
-
+        ListarClinicas()
+    }, [])
     return (
         <Container>
             <Title2> Selecionar clínica </Title2>
 
-               
+
             <ListComponent
                 data={clinicaLista}
                 key={(item) => item.id}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
 
                     <ClinicCardSelect
                         name={item.nomeFantasia}
@@ -60,19 +53,11 @@ ListarClinicas()
                         rate={"5"}
                         disponibility={"Seg-Sex"}
                         clickButton={selectClinic}
-                        onPress={() => {setSelectClinic(true); setIdConfirm(item.id)}}
+                        onPress={() => { setSelectClinic(true); setIdConfirm(item.id) }}
                         index={idConfirm}
                         clinicId={item.id}
                     />
                 )} />
-                
-                
-
-                
-
-
-
-               
 
             <Button onPress={() => navigation.navigate("SelectDoctor")}>
                 <ButtonTxt> CONTINUAR </ButtonTxt>

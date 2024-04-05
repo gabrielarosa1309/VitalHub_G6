@@ -6,8 +6,26 @@ import { ButtonTxt } from "../EntryButton/Style";
 import { LinkCancel } from "../Links/Style";
 
 const MedModal = ({
-    navigation, visible, setShowMedModal, ...rest
+    navigation, 
+    visible, 
+    setShowMedModal,
+    roleUsuario,
+    dataConsulta,
+    prioridade,
+    usuarioConsulta,
+    situacao, 
+    consulta,
+    ...rest
 }) => {
+    async function handleClose(screen) {
+        await setShowMedModal(false)
+        
+        if (screen == "Location") {
+          navigation.replace(screen, { clinicaid: consulta.medicoClinica.clinicaId })
+        } else {
+          navigation.replace(screen)
+        }
+      }
     
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade">
@@ -23,7 +41,7 @@ const MedModal = ({
                         <ContentTxt>CRM-15286</ContentTxt>
                     </ProfileData>
 
-                    <BtnModal onPress={() => navigation.navigate("Location")}>
+                    <BtnModal onPress={() => handleClose("Location")}>
                         <ButtonTxt> Ver local da consulta </ButtonTxt>
                     </BtnModal>
 

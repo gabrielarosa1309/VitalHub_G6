@@ -8,11 +8,12 @@ import { FontAwesome } from "@expo/vector-icons"
 import * as MediaLibrary from "expo-media-library"
 
 const CameraModal = ({
-    navigation, visible, setUriCameraCapture, setShowCameraModal, ...rest
+    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, ...rest
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null)
-    const [cameraType, setCameraType] = useState(CameraType.Constants.Type.front)
+    const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
+    const [openModal, setOpenModal] = useState(false)
 
     async function CapturePhoto() {
         if (cameraRef) {
@@ -53,54 +54,57 @@ const CameraModal = ({
 
 
     return (
-        <View style={styles.container}>
-            {/* 2- chamando a camera */}
-            <Camera
-                ref={cameraRef}
-                type={cameraType}
-                style={styles.camera}
+        <Modal>
+            <View style={styles.container}>
+                {/* 2- chamando a camera */}
+                <Camera
+                    ref={cameraRef}
+                    type={cameraType}
+                    style={styles.camera}
 
-                ratio={'16:9'}
-            >
+                    ratio={'16:9'}
+                >
 
-                <View style={styles.viewFlip}>
-                    <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType == CameraType.front ? CameraType.back : CameraType.front)}>
-                        <Text style={styles.txtFlip}>Trocar</Text>
-                    </TouchableOpacity>
-                </View>
-
-            </Camera>
-
-            <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
-                <FontAwesome
-                    name='camera'
-                    size={23}
-                    color={"#fff"}
-                />
-            </TouchableOpacity>
-
-            <Modal animationType='slide' transparent={false} visible={openModal}>
-                <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 30 }}>
-                    <Image style={{ width: '100%', height: 500, borderRadius: 10 }} source={{ uri: photo }} />
-                    <View style={{ margin: 15, flexDirection: 'row' }}>
-                        <TouchableOpacity style={styles.btnCancel} onPress={() => ClearPhoto()}>
-                            <FontAwesome
-                                name='trash'
-                                size={40}
-                                color={"#ff0000"}
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btnSave} onPress={() => SavePhoto()}>
-                            <FontAwesome
-                                name='save'
-                                size={40}
-                                color={"#121212"}
-                            />
+                    <View style={styles.viewFlip}>
+                        <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType == CameraType.front ? CameraType.back : CameraType.front)}>
+                            <Text style={styles.txtFlip}>Trocar</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
-            </Modal>
-        </View>
+
+                </Camera>
+
+                <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
+                    <FontAwesome
+                        name='camera'
+                        size={23}
+                        color={"#fff"}
+                    />
+                </TouchableOpacity>
+
+                <Modal animationType='slide' transparent={false} visible={openModal}>
+                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 30 }}>
+                        <Image style={{ width: '100%', height: 500, borderRadius: 10 }} source={{ uri: photo }} />
+                        <View style={{ margin: 15, flexDirection: 'row' }}>
+                            <TouchableOpacity style={styles.btnCancel} onPress={() => ClearPhoto()}>
+                                <FontAwesome
+                                    name='trash'
+                                    size={40}
+                                    color={"#ff0000"}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.btnSave} onPress={() => SavePhoto()}>
+                                <FontAwesome
+                                    name='save'
+                                    size={40}
+                                    color={"#121212"}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
+        </Modal>
+
     );
 }
 
@@ -112,7 +116,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     camera: {
-        flex: 1,
         width: '100%',
         height: '80%'
     },

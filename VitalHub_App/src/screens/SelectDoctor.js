@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
 import { Container } from "../components/Container/Style";
 import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Title2 } from "../components/Title/Style";
 import api from "../Service/Service";
 import { ListComponent } from "../components/List/List";
-import { FlatList } from "react-native";
-import { Text } from "react-native";
-import { View } from "react-native";
 import { DoctorCardSelect } from "../components/DoctorCardSelect/DoctorCardSelect";
+import { useEffect, useState } from "react";
 
 export const SelectDoctor = ({ navigation }) => {
 
@@ -22,11 +19,8 @@ export const SelectDoctor = ({ navigation }) => {
     const [idConfirm, setIdConfirm] = useState()
 
     async function ListarMedicos() {
-
-
         try {
             const resApi = await api.get("/Medicos")
-
             setMedicoLista(resApi.data)
 
         } catch (error) {
@@ -36,19 +30,12 @@ export const SelectDoctor = ({ navigation }) => {
     }
 
     useEffect(() => {
-
         ListarMedicos()
-
     }, [])
 
     return (
-
-
-
         <Container>
             <Title2> Selecionar médico </Title2>
-
-           
 
             <ListComponent
                 data={medicoLista}

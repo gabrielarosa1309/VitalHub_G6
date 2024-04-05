@@ -1,36 +1,35 @@
+import { useEffect, useState } from "react";
 import { Container, ContainerScroll } from "../components/Container/Style";
-import { Button, ButtonTxt } from "../components/EntryButton/Style";
+import { Button, ButtonTxt, ExitButton } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../utils/auth/auth";
-import { useEffect, useState } from "react";
+
 export const PatientProfile = ({ navigation }) => {
 
 
-async function LogOut() {
-    
-    await AsyncStorage.removeItem('token')
+    async function LogOut() {
+        await AsyncStorage.removeItem('token')
+        navigation.navigate('Login')
 
-    navigation.navigate('Login')
+        // const info = await AsyncStorage.getItem('token')
+        // console.log(info)
+    }
 
 
-}
 
-async function profileLoad() {
-    
-const data = await userDecodeToken();
+    async function profileLoad() {
+        const data = await userDecodeToken();
+        setUserData(data)
+    }
 
-setUserData(data)
-}
+    useEffect(() => {
+        profileLoad();
+    }, [])
 
-useEffect(() => {
-
-    profileLoad();
-}, [])
-
-const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState({})
 
 
     return (
@@ -80,5 +79,5 @@ const [userData, setUserData] = useState({})
 
         </Container>
     );
-}
+    }
 export default PatientProfile;
