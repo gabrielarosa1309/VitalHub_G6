@@ -18,7 +18,7 @@ export const Location = ({ navigation, route }) => {
     }, [clinica])
 
     async function BuscarClinica() {
-        await api.get(`/Clinica/BuscarPorId?id=${route.params.clinica}`)
+        var response =await api.get(`/Clinica/BuscarPorId?id=${route.params.clinicaid}`)
             .then(response => {
                 setClinica(response.data)
                 console.log(response.data)
@@ -32,10 +32,13 @@ export const Location = ({ navigation, route }) => {
             {
                 clinica != null ? (
                     <>
-                        <Map />
+                        <Map 
+                            longitude={clinica.endereco.longitude}
+                            latitude={clinica.endereco.latitude}
+                        />
 
                         <TitleLocation> {clinica.nomeFantasia} </TitleLocation>
-                        <Subtitle> {clinica.endereco.logradouro} </Subtitle>
+                        <Subtitle> {clinica.endereco.cidade}, {clinica.endereco.estado}</Subtitle>
 
                         <BoxInput>
                             <TitleInput> Endereço </TitleInput>
@@ -50,7 +53,7 @@ export const Location = ({ navigation, route }) => {
 
                             <BoxInputRow>
                                 <TitleInput> Bairro </TitleInput>
-                                <InputBodyRow>{clinica.endereco.numero}</InputBodyRow>
+                                <InputBodyRow>{clinica.endereco.bairro}</InputBodyRow>
                             </BoxInputRow>
                         </DirectionRow>
 

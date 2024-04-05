@@ -1,19 +1,36 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Text, View } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositionAsync, LocationAccuracy } from "expo-location"
 import { useEffect, useState, useRef } from 'react';
 import MapViewDirections from 'react-native-maps-directions';
 import { mapskey } from '../../utils/apiKey';
+import api from '../../service/service';
+import { StyleSheet } from 'react-native-web'; 
 
-export const Map = () => {
+export const Map = ({ latitude, longitude}) => {
     const mapReference = useRef(null)
-
     const [initialPosition, setInitialPosition] = useState(null);
-
     const [finalPosition, setFinalPosition] = useState({
-        latitude: -9.5260,
-        longitude: -43.6041,
+        latitude : latitude, longitude: longitude
     })
+    const [endereco, setEndereco] = useState({})
+
+      useEffect(() => {
+          fetchLocation();
+  
+          watchPositionAsync({
+              accuracy: LocationAccuracy.Highest,
+              timeInterval: 1000,
+              distanceInterval: 1,
+          }, async (response) => {
+              await setInitialPosition(response)
+  
+              mapReference.current?.animateCamera({
+                  pitch: 60,
+                  center: response.coords
+              })
+          })
+      }, [1000])
 
     async function fetchLocation() {
         const { granted } = await requestForegroundPermissionsAsync()
@@ -25,41 +42,25 @@ export const Map = () => {
         }
     }
 
-    useEffect(() => {
-        fetchLocation();
 
-        watchPositionAsync({
-            accuracy: LocationAccuracy.Highest,
-            timeInterval: 1000,
-            distanceInterval: 1,
-        }, async (response) => {
-            await setInitialPosition(response)
+    // useEffect(() => {
+    //     ReloadMapVisualization()
+    // }, [initialPosition])
 
-            mapReference.current?.animateCamera({
-                pitch: 60,
-                center: response.coords
-            })
-        })
-    }, [1000])
-
-    useEffect(() => {
-        ReloadMapVisualization()
-    }, [initialPosition])
-
-    async function ReloadMapVisualization() {
-        if (mapReference.current && initialPosition) {
-            await mapReference.current.fitToCoordinates(
-                [
-                    { latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude },
-                    { latitude: finalPosition.latitude, longitude: finalPosition.longitude }
-                ],
-                {
-                    edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
-                    animated: true
-                }
-            )
-        }
-    }
+    // async function ReloadMapVisualization() {
+    //     if (mapReference.current && initialPosition) {
+    //         await mapReference.current.fitToCoordinates(
+    //             [
+    //                 { latitude: initialPosition.coords.latitude, longitude: initialPosition.coords.longitude },
+    //                 { latitude: finalPosition.latitude, longitude: finalPosition.longitude }
+    //             ],
+    //             {
+    //                 edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
+    //                 animated: true
+    //             }
+    //         )
+    //     }
+    // }
 
 
     return (
@@ -91,8 +92,8 @@ export const Map = () => {
                             <MapViewDirections
                                 origin={initialPosition.coords}
                                 destination={{
-                                    latitude: -9.5260,
-                                    longitude: -43.6041,
+                                    latitude: finalPosition.latitude,
+                                    longitude: finalPosition.longitude,
                                     latitudeDelta: 0.005,
                                     longitudeDelta: 0.005
                                 }}
@@ -103,8 +104,8 @@ export const Map = () => {
 
                             <Marker
                                 coordinate={{
-                                    latitude: -9.5260,
-                                    longitude: -43.6041,
+                                    latitude: finalPosition.latitude,
+                                    longitude: finalPosition.longitude,
                                 }}
                                 title='Initial position'
                                 pinColor={"blue"}
