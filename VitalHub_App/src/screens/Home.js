@@ -15,12 +15,6 @@ import { UserIcon } from "../components/Header/Style";
 import moment from "moment";
 import api from "../service/service";
 
-const Consultas = [
-    { id: 1, situacao: "pendente" },
-    { id: 4, situacao: "realizado" },
-    { id: 8, situacao: "cancelado" }
-]
-
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
     const [info, setInfo] = useState({})
