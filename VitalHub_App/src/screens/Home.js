@@ -74,14 +74,18 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                console.log(response.data)
+                
             }).catch(error => {
                 console.log(error);
             })
     }
 
     async function CancelConsult() {
-       await api.put(`/Consultas/Status`, {id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5"}).then(response => console.log(response.status))
+
+       await api.put(`/Consultas/Status`, {id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5"})
+       .then(response => {if (response.status == 200) {
+        setShowModalCancel(false)
+       }})
             .catch(error => {
                 console.log(error);
             })
@@ -100,7 +104,7 @@ export const Home = ({ navigation }) => {
         if (dataConsulta != '') {
             ListarConsultas();
         }
-        }, [dataConsulta])
+        }, [dataConsulta, showModalCancel])
 
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
