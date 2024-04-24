@@ -11,7 +11,7 @@ import AppointmentButton from "../components/AppointmentButton/AppointmentButton
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
-import { UserIcon } from "../components/Header/Style";
+
 import moment from "moment";
 import api from "../service/service";
 

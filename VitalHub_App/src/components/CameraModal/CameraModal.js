@@ -8,12 +8,13 @@ import { FontAwesome } from "@expo/vector-icons"
 import * as MediaLibrary from "expo-media-library"
 
 const CameraModal = ({
-    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, ...rest
+    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null)
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
     const [openModal, setOpenModal] = useState(false)
+    const [latestPhoto, setLatestPhoto] = useState(null)
 
     async function CapturePhoto() {
         if (cameraRef) {
@@ -41,6 +42,16 @@ const CameraModal = ({
                 })
 
             setOpenModal(false)
+        }
+    }
+
+    async function GetLastPhoto() {
+        const assets = await MediaLibrary.getAssetsAsync({ sortBy : [[MediaLibrary.SortBy.creationTime, false]], first : 1 });
+
+        console.log(assets);
+
+        if(assets.length > 0){
+            setLatestPhoto(assets[0].uri)
         }
     }
 
