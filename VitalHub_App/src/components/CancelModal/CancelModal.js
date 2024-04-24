@@ -18,7 +18,7 @@ Notifications.setNotificationHandler({
 });
 
 const CancelModal = ({
-    visible, setShowModalCancel, ...rest
+    onPressConfirm, visible, setShowModalCancel, ...rest
 }) => {
     //funcao pra lidar com chamada da notificacao
     const handleCallNotifications = async () => {
@@ -51,7 +51,7 @@ const CancelModal = ({
 
                     <ModalTxt> Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário. Deseja mesmo cancelar essa consulta? </ModalTxt>
 
-                    <BtnModal onPress={handleCallNotifications}>
+                    <BtnModal onPress={onPressConfirm}>
                         <ButtonTxt> Confirmar </ButtonTxt>
                     </BtnModal>
 

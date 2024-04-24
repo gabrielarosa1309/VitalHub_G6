@@ -25,6 +25,6 @@ if (token === null)
 
 const decoded = jwtDecode(token)
 
-return {role: decoded.role, name: decoded.name, email: decoded.email, user:decoded.jti}
+return {role: decoded.role, name: decoded.name, email: decoded.email, user: decoded.jti}
 
 }

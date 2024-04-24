@@ -6,6 +6,7 @@ import { Input } from "../components/Input/Style";
 import { Logo } from "../components/Logo/Style";
 import { Title } from "../components/Title/Style";
 import { Text } from "react-native";
+import api from '../Service/Service';
 
 export const ResetPassword = ({ navigation }) => {
     const [email, setEmail] = useState('');
@@ -23,11 +24,21 @@ export const ResetPassword = ({ navigation }) => {
         return true;
     };
 
-    const handleSubmit = () => {
-        if (validateEmail(email)) {
-            navigation.navigate("VerifyEmail");
-        }
-    };
+async function handleSubmit() {
+
+
+        api.post(`/RecuperarSenha?email=${email}`).then((response) => {
+
+            navigation.replace("VerifyEmail", {email : email});
+
+        }).catch(error => console.log(error))
+
+        
+        
+    
+}
+
+
 
     return (
         <Container2>
@@ -47,7 +58,7 @@ export const ResetPassword = ({ navigation }) => {
             />
             {emailError && <Text style={{ color: 'red' }}>{emailError}</Text>}
 
-            <ButtonReset onPress={handleSubmit}>
+            <ButtonReset onPress={() => handleSubmit()}>
                 <ButtonTxt> CONTINUAR </ButtonTxt>
             </ButtonReset>
         </Container2>

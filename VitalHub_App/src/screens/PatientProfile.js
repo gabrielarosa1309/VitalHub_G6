@@ -11,6 +11,9 @@ import CameraModal from "../components/CameraModal/CameraModal";
 
 export const PatientProfile = ({ navigation }) => {
     const [openModal, setOpenModal] = useState(false)
+    const [userData, setUserData] = useState({})
+    const [profileData, setProfileData] = useState({})
+    const [dataCheck, setDataCheck] = useState({})
 
     async function LogOut() {
         await AsyncStorage.removeItem('token')
@@ -20,17 +23,34 @@ export const PatientProfile = ({ navigation }) => {
         // console.log(info)
     }
 
+
+
     async function profileLoad() {
         const data = await userDecodeToken();
         setUserData(data)
     }
 
+    async function EditLoad() {
+        const data = await AsyncStorage.getItem('profileInfo');
+                console.log(data);
+        if (data === null) {
+            setProfileData({dataNascimento: "DD/MM/AAAA",
+                cpf: "cpf",
+                endereco: "endereco",
+                cep: "cep",
+                cidade: "cidade"})}
+                else{
+                    
+                    setProfileData(JSON.parse(data))
+                    console.log("dados edit");
+                   console.log(profileData);
+                }
+        }
+
     useEffect(() => {
-        profileLoad();
+        profileLoad(); 
+        EditLoad();
     }, [])
-
-    const [userData, setUserData] = useState({})
-
 
     return (
         <Container>
@@ -52,28 +72,38 @@ export const PatientProfile = ({ navigation }) => {
             <ContainerScroll>
                 <BoxInput>
                     <TitleInput> Data de nascimento </TitleInput>
-                    <InputBlock> 08/08/2018 </InputBlock>
+                    <InputBlock>
+                    {profileData.dataNascimento}
+                    </InputBlock>
                 </BoxInput>
 
                 <BoxInput>
                     <TitleInput> CPF </TitleInput>
-                    <InputBlock> 859******** </InputBlock>
+                    <InputBlock>
+                    {profileData.cpf}
+                    </InputBlock>
                 </BoxInput>
 
                 <BoxInput>
                     <TitleInput> Endereço </TitleInput>
-                    <InputBlock> Rua Luis Ântico, 623 </InputBlock>
+                    <InputBlock>
+                    {profileData.endereco}
+                    </InputBlock>
                 </BoxInput>
 
                 <DirectionRow>
                     <BoxInputRow>
                         <TitleInput> Cep </TitleInput>
-                        <InputBodyRow>09360-610</InputBodyRow>
+                        <InputBodyRow>
+                        {profileData.cep}
+                        </InputBodyRow>
                     </BoxInputRow>
 
                     <BoxInputRow>
                         <TitleInput> Cidade </TitleInput>
-                        <InputBodyRow>Mauá-SP</InputBodyRow>
+                        <InputBodyRow>
+                        {profileData.cidade}
+                        </InputBodyRow>
                     </BoxInputRow>
                 </DirectionRow>
 
@@ -92,4 +122,5 @@ export const PatientProfile = ({ navigation }) => {
         </Container>
     );
 }
+
 export default PatientProfile;

@@ -8,7 +8,7 @@ import { Logo } from "../components/Logo/Style";
 import { Title } from "../components/Title/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Alert, Text } from "react-native";
-import api from '../service/service';
+import api from '../Service/Service';
 
 export const CreateAccount = ({ navigation }) => {
     const [nome, setNome] = useState('');

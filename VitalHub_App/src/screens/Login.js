@@ -7,7 +7,7 @@ import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { GoogleButton, IconGoogleButton, TitleGoogleButton } from "../components/GoogleButton/Style";
 import { CreateAccount, LinkCreateAccount, TextCreateAccount } from "../components/CreateAccount/Style";
 import { useState } from "react";
-import api from "../service/service";
+import api from "../Service/Service";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text, Alert } from "react-native";
 

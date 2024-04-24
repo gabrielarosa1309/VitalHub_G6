@@ -34,6 +34,8 @@ justify-content: flex-start;
 gap: 8px;
 `
 
+
+
 export const AlignSelectDoctorText = styled.View`
 align-items: flex-start;
 gap: 5px;

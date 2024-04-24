@@ -11,9 +11,31 @@ import AppointmentButton from "../components/AppointmentButton/AppointmentButton
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
-
 import moment from "moment";
-import api from "../service/service";
+import { UserIcon } from "../components/Header/Style";
+
+    // async function ListarConsultas() {
+
+    //     try {
+    //         const token = JSON.parse( await AsyncStorage.getItem("token") ).token
+           
+    //         console.log("token");
+    //         console.log(token);
+
+    //         const resApi = await api.get("/Consultas", {
+    //             headers: {
+
+    //                 "Authorization": `Bearer ${token}`
+    //             }
+    //         })
+    //         console.log(resApi.data);
+    //     setListaConsultas(resApi.data)
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+       
+    // }
 
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
@@ -23,10 +45,14 @@ export const Home = ({ navigation }) => {
     const [showModalCancel, setShowModalCancel] = useState(false);
     const [showModalApp, setShowModalApp] = useState(false);
     const [dataConsulta, setDataConsulta] = useState('');
-    const [consultas, setConsultas] = useState('');
+    const [consultas, setConsultas] = useState([]);
     const [time, setTime] = useState('');
     const [consultaSelecionada, setConsultaSelecionada] = useState('');
 
+    //State para armazenar informacoes dos cards para atualizar os status
+    const [putId, setPutId] = useState("");
+
+  
 
     async function profileLoad() {
         const token = await userDecodeToken();
@@ -44,21 +70,37 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                console.log(response.data)
+                
             }).catch(error => {
+                console.log(error);
+            })
+    }
+
+    async function CancelConsult() {
+
+       await api.put(`/Consultas/Status`, {id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5"})
+       .then(response => {if (response.status == 200) {
+        setShowModalCancel(false)
+       }})
+            .catch(error => {
                 console.log(error);
             })
     }
 
     useEffect(() => {
         profileLoad();
+    
+        
     }, [])
 
     useEffect(() => {
+
+       
+        
         if (dataConsulta != '') {
             ListarConsultas();
         }
-    }, [dataConsulta])
+        }, [dataConsulta, showModalCancel])
 
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
@@ -71,7 +113,9 @@ export const Home = ({ navigation }) => {
     }
 
     return (
+        
         <Container>
+          
 
             <Header
                 img={require("../assets/img/chewie.jpg")}
@@ -114,13 +158,14 @@ export const Home = ({ navigation }) => {
                             navigation={navigation}
 
                             roleUsuario={profile.role}
-                            dataConsulta={item.dataConsulta}
+                            dataConsulta={item.dataConsulta} 
                             prioridade={item.prioridade.prioridade}
                             usuarioConsulta={ profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
                             time={item.dataConsulta}
-
+                            
                             onPressMedModal={() => MostrarModal('prontuario', item)}
-                            onPressCancel={() => MostrarModal('cancelar', item)}
+                            onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
+                            
                         />
                     )
                 }
@@ -129,6 +174,8 @@ export const Home = ({ navigation }) => {
             <AppointmentButton onPress={() => setShowModalApp(true)} />
 
             <CancelModal
+            onPressConfirm={() => CancelConsult()}
+                
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />

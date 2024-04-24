@@ -6,8 +6,9 @@ import { Input } from "../components/Input/Style";
 import { Logo } from "../components/Logo/Style";
 import { Title } from "../components/Title/Style";
 import { Text } from "react-native";
+import api from '../Service/Service';
 
-export const SetPassword = () => {
+export const SetPassword = ({navigation, route}) => {
     const [senha, setSenha] = useState('');
     const [confirmSenha, setConfirmSenha] = useState('');
     const [senhaError, setSenhaError] = useState('');
@@ -35,18 +36,22 @@ export const SetPassword = () => {
         return true;
     };
 
-    const handleSubmit = () => {
-        if (validateSenha(senha) && validateConfirmSenha(senha, confirmSenha)) {
-            // Aqui você pode adicionar a lógica para redefinir a senha
-            console.log("Senha redefinida com sucesso.");
-        }
-    };
+async function AtualizarSenha() {
+
+    if (senha === confirmSenha) {
+        console.log(route)
+        await api.put(`/Usuario/AlterarSenha?email=${route.params.emailP}`, {senhaNova : senha})
+        .then(() => {navigation.replace("Login")})
+        .catch((error) => {console.log(error)})
+    }
+    
+}
 
     return (
         <Container>
             <Logo source={require("../assets/img/VitalHub_Logo1.png")} />
 
-            <Title> Redefinir senha </Title>
+            <Title> Redefinir senha</Title>
 
             <TextBox>
                 <DefaultText> Insira e confirme a sua nova senha </DefaultText>
@@ -70,7 +75,7 @@ export const SetPassword = () => {
             />
             {confirmSenhaError && <Text style={{ color: 'red' }}>{confirmSenhaError}</Text>}
 
-            <ButtonReset onPress={handleSubmit}>
+            <ButtonReset onPress={() => {AtualizarSenha()}}>
                 <ButtonTxt> CONFIRMAR NOVA SENHA </ButtonTxt>
             </ButtonReset>
         </Container>

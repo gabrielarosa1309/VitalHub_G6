@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, ContainerScroll } from "../components/Container/Style";
 import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
@@ -6,6 +6,8 @@ import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow, InputIns
 import { LinkCancel } from "../components/Links/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
 import { Text } from "react-native";
+import { userDecodeToken } from '../utils/Auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const EditPatientProfile = ({ navigation }) => {
     const [dataNascimento, setDataNascimento] = useState('');
@@ -18,6 +20,49 @@ export const EditPatientProfile = ({ navigation }) => {
     const [enderecoError, setEnderecoError] = useState('');
     const [cepError, setCepError] = useState('');
     const [cidadeError, setCidadeError] = useState('');
+    const [userData, setUserData] = useState({})
+    const [editInfo, setEditInfo] = useState()
+
+async function PostEditInfo() {
+
+    try {
+    if (await AsyncStorage.getItem("profileInfo") != null) {
+        await AsyncStorage.removeItem("profileInfo")
+        await AsyncStorage.setItem("profileInfo", JSON.stringify(editInfo))
+    navigation.navigate("PatientProfile")
+    }
+          else{  
+    await AsyncStorage.setItem("profileInfo", JSON.stringify(editInfo))
+    navigation.navigate("PatientProfile")}
+        
+    } catch (error) {
+        console.log(error);
+    }
+    
+}
+
+   async function ValidarEdicao() {
+        
+
+        if (validateCampos) {
+            
+             await setEditInfo({dataNascimento: dataNascimento,
+                cpf: cpf,
+                endereco: endereco,
+                cep: cep,
+                cidade: cidade})
+
+            
+
+                await PostEditInfo();
+              
+        }
+
+        
+
+
+       
+    }
 
     const validateCampos = () => {
         let isValid = true;
@@ -60,19 +105,23 @@ export const EditPatientProfile = ({ navigation }) => {
         return isValid;
     };
 
-    const handleSubmit = () => {
-        if (validateCampos()) {
-            // Aqui você pode adicionar a lógica para salvar o perfil do paciente
-            console.log("Perfil do paciente salvo com sucesso.");
-        }
-    };
+ 
+
+    async function profileLoad() {
+        const data = await userDecodeToken();
+        setUserData(data)
+    }
+
+    useEffect(() => {
+        profileLoad();
+    }, [])
 
     return (
         <Container>
             <ImgProfile source={require("../assets/img/chewie.jpg")} />
 
-            <Title> Chewie </Title>
-            <Subtitle> chewie@email.com </Subtitle>
+            <Title> {userData.name} </Title>
+            <Subtitle> {userData.email} </Subtitle>
 
             <ContainerScroll>
                 <BoxInput>
@@ -132,7 +181,7 @@ export const EditPatientProfile = ({ navigation }) => {
                     </BoxInputRow>
                 </DirectionRow>
 
-                <Button onPress={handleSubmit}>
+                <Button onPress={() => ValidarEdicao()}>
                     <ButtonTxt> SALVAR </ButtonTxt>
                 </Button>
 

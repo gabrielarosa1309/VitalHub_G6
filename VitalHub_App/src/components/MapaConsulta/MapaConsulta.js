@@ -4,7 +4,7 @@ import { requestForegroundPermissionsAsync, getCurrentPositionAsync, watchPositi
 import { useEffect, useState, useRef } from 'react';
 import MapViewDirections from 'react-native-maps-directions';
 import { mapskey } from '../../utils/apiKey';
-import api from '../../service/service';
+import api from '../../Service/Service';
 import { StyleSheet } from 'react-native-web'; 
 
 export const Map = ({ latitude, longitude}) => {

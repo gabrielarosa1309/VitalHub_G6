@@ -5,7 +5,7 @@ import { ListComponent } from "../components/List/List";
 
 import { Title2 } from "../components/Title/Style";
 
-import api from "../service/service";
+import api from "../Service/Service";
 import { ClinicCardSelect } from "../components/ClinicCardSelect/ClinicCardSelect";
 
 

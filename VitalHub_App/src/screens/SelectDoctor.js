@@ -2,7 +2,7 @@ import { Container } from "../components/Container/Style";
 import { Button, ButtonTxt } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Title2 } from "../components/Title/Style";
-import api from "../service/service";
+import api from "../Service/Service";
 import { ListComponent } from "../components/List/List";
 import { DoctorCardSelect } from "../components/DoctorCardSelect/DoctorCardSelect";
 import { useEffect, useState } from "react";
