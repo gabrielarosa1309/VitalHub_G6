@@ -52,7 +52,7 @@ export const Login = ({ navigation }) => {
                 email: email,
                 senha: senha
             });
-
+console.log(response.status)
             await AsyncStorage.setItem('token', JSON.stringify(response.data));
             navigation.navigate("Main");
         } catch (error) {

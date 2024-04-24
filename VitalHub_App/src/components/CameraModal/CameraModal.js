@@ -6,14 +6,18 @@ import { Camera, CameraType } from 'expo-camera';
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesome } from "@expo/vector-icons"
 import * as MediaLibrary from "expo-media-library"
+import { LastPhoto } from './Style';
+
+
 
 const CameraModal = ({
-    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, ...rest
+    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null)
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
     const [openModal, setOpenModal] = useState(false)
+    const [latestFoto, setLatestFoto] = useState(null)
 
     async function CapturePhoto() {
         if (cameraRef) {
@@ -44,12 +48,25 @@ const CameraModal = ({
         }
     }
 
+    async function GetLastPhoto() {
+        
+        const {assets} = await MediaLibrary.getAssetsAsync({SortBy : [[MediaLibrary.SortBy.creationTime, false]], first : 1})
+console.log(assets);
+
+if (assets.length > 0) {
+    
+    setLatestFoto(assets[0].uri)
+}
+    }
+
     useEffect(() => {
         (async () => {
             const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
 
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
+GetLastPhoto()
+        
     }, [])
 
 
@@ -73,18 +90,44 @@ const CameraModal = ({
 
                 </Camera>
 
+                <View style={styles.alignButtons}>
+                <TouchableOpacity>
+
+                                {latestFoto != null ? 
+                            
+                            (
+                            <LastPhoto
+                            source={{uri : latestFoto}}
+                            />
+                            
+                            )
+
+                            :
+
+                            null
+                            }
+
+                            </TouchableOpacity>
+
+
                 <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
                     <FontAwesome
                         name='camera'
                         size={23}
                         color={"#fff"}
                     />
+
+
                 </TouchableOpacity>
 
+                </View>
                 <Modal animationType='slide' transparent={false} visible={openModal}>
                     <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 30 }}>
                         <Image style={{ width: '100%', height: 500, borderRadius: 10 }} source={{ uri: photo }} />
                         <View style={{ margin: 15, flexDirection: 'row' }}>
+
+                            
+
                             <TouchableOpacity style={styles.btnCancel} onPress={() => ClearPhoto()}>
                                 <FontAwesome
                                     name='trash'
@@ -99,6 +142,8 @@ const CameraModal = ({
                                     color={"#121212"}
                                 />
                             </TouchableOpacity>
+
+                            
                         </View>
                     </View>
                 </Modal>
@@ -109,6 +154,10 @@ const CameraModal = ({
 }
 
 const styles = StyleSheet.create({
+    alignButtons: {flexDirection : 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 30},
     container: {
         flex: 1,
         backgroundColor: '#fff',

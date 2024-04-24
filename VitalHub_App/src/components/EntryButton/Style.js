@@ -39,3 +39,23 @@ export const ExitButton = styled(Button)`
     background-color: #ACABB7;
 
 `
+export const ButtonCamera = styled.TouchableOpacity.attrs({
+    activeOpacity: 0.8
+})`
+padding: 12px;
+border-radius: 10px;
+background-color: #496dba;
+border: 1px solid #fbfbfb;
+position: absolute;
+bottom: -20px;
+right: 15px;
+
+`
+export const ContainerImage = styled.View`
+    width: 100%;
+    height: 280px;
+    margin-bottom: 20px;
+    position: relative;
+    align-items: center;
+    justify-content: flex-start;
+`
