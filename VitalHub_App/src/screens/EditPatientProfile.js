@@ -41,12 +41,12 @@ async function PostEditInfo() {
     
 }
 
-   async function ValidarEdicao() {
+   function ValidarEdicao() {
         
 
         if (validateCampos) {
             
-             await setEditInfo({dataNascimento: dataNascimento,
+             setEditInfo({dataNascimento: dataNascimento,
                 cpf: cpf,
                 endereco: endereco,
                 cep: cep,
@@ -54,15 +54,13 @@ async function PostEditInfo() {
 
             
 
-                await PostEditInfo();
+                
               
         }
-
-        
-
-
        
     }
+
+    useEffect(() => {PostEditInfo()}, [editInfo])
 
     const validateCampos = () => {
         let isValid = true;

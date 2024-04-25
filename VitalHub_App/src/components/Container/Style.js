@@ -5,6 +5,12 @@ export const Container = styled.SafeAreaView`
     align-items: center;
     background-color: #FAFAFA;
 `
+
+export const ContainerProfileImage = styled.View`
+
+`
+
+
 export const ContainerLogin = styled(Container)`
     justify-content: center;
     gap: 20px;

@@ -6,15 +6,20 @@ import { Camera, CameraType } from 'expo-camera';
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesome } from "@expo/vector-icons"
 import * as MediaLibrary from "expo-media-library"
+
+
+import * as ImagePicker from 'expo-image-picker'
+
+
 import { LastPhoto } from './Style';
 
 
 
 const CameraModal = ({
-    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
+     navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
 }) => {
     const cameraRef = useRef(null);
-    const [photo, setPhoto] = useState(null)
+    const [photo, setPhoto] = useState(null) //capturar foto ou selecionada da galeria
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
     const [openModal, setOpenModal] = useState(false)
     const [latestFoto, setLatestFoto] = useState(null)
@@ -25,33 +30,49 @@ const CameraModal = ({
             setPhoto(photo.uri)
 
             setOpenModal(true)
-
-            console.log(photo);
+           
+            
         }
     }
 
     async function ClearPhoto() {
         setPhoto(null)
-        setOpenModal(false)
+        fecharModal(false)
+    }
+
+    async function SelectImageGallery()
+    {
+        const result = await ImagePicker.launchImageLibraryAsync({
+
+            mediaTypes : ImagePicker.MediaTypeOptions.Images,
+            quality: 1,
+        });
+if ( !result.canceled ) {
+    setPhoto( result.assets[0].uri)
+
+}
+
     }
 
     async function SavePhoto() {
         if (photo) {
-            await MediaLibrary.createAssetAsync(photo)
-                .then(() => {
-                    Alert.alert("Sucesso", "Foto salva na galeria")
-                }).catch(error => {
-                    Alert.alert("Erro", "Erro ao salvar foto")
-                })
+            // await MediaLibrary.createAssetAsync(photo)
+            //     .then(() => {
+            //         Alert.alert("Sucesso", "Foto salva na galeria")
+            //     }).catch(error => {
+            //         Alert.alert("Erro", "Erro ao salvar foto")
+            //     })
 
-            setOpenModal(false)
+            setUriCameraCapture(photo)
+
+            fecharModal(false)
         }
     }
 
     async function GetLastPhoto() {
         
         const {assets} = await MediaLibrary.getAssetsAsync({SortBy : [[MediaLibrary.SortBy.creationTime, false]], first : 1})
-console.log(assets);
+
 
 if (assets.length > 0) {
     
@@ -91,7 +112,9 @@ GetLastPhoto()
                 </Camera>
 
                 <View style={styles.alignButtons}>
-                <TouchableOpacity>
+                <TouchableOpacity 
+                onPress={() => SelectImageGallery()}
+                >
 
                                 {latestFoto != null ? 
                             
@@ -110,7 +133,7 @@ GetLastPhoto()
                             </TouchableOpacity>
 
 
-                <TouchableOpacity style={styles.btnCapture} onPress={() => CapturePhoto()}>
+                <TouchableOpacity style={styles.btnCapture} onPress={() => {CapturePhoto()}}>
                     <FontAwesome
                         name='camera'
                         size={23}

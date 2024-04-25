@@ -4,16 +4,16 @@ import { Button, ButtonCamera, ButtonTxt, ContainerImage, ExitButton } from "../
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../utils/auth/auth"
-import { View } from "react-native";
 import {MaterialCommunityIcons} from '@expo/vector-icons'
 import CameraModal from "../components/CameraModal/CameraModal";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import api from "../Service/Service";
 
-export const PatientProfile = ({ navigation }) => {
+export const PatientProfile = ({ navigation, route }) => {
     const [userData, setUserData] = useState({})
     const [profileData, setProfileData] = useState({})
-    const [dataCheck, setDataCheck] = useState({})
+    const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
     const [open, setOpen] = useState(false)
 
     async function LogOut() {
@@ -25,6 +25,25 @@ export const PatientProfile = ({ navigation }) => {
     }
 
 
+    async function AlterarFotoPerfil() {
+        
+        const formData = new FormData();
+       
+      formData.append("Arquivo", 
+        {
+            uri: uriCameraCapture,
+            name: `image.${uriCameraCapture.split(".")[1]}`,
+            type: `image/${uriCameraCapture.split(".")[1]}`
+        })
+
+       console.log("form data"); 
+console.log(formData);
+
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
+        .then((response) => {console.log(response.status); setUserData({ ...userData, foto : uriCameraCapture})})
+        .catch((error) => console.log(error)) 
+
+    }
 
     async function profileLoad() {
         const data = await userDecodeToken();
@@ -33,7 +52,7 @@ export const PatientProfile = ({ navigation }) => {
 
     async function EditLoad() {
         const data = await AsyncStorage.getItem('profileInfo');
-                console.log(data);
+             
         if (data === null) {
             setProfileData({dataNascimento: "DD/MM/AAAA",
                 cpf: "cpf",
@@ -43,31 +62,34 @@ export const PatientProfile = ({ navigation }) => {
                 else{
                     
                     setProfileData(JSON.parse(data))
-                    console.log("dados edit");
-                   console.log(profileData);
+          
                 }
                 
         }
-       
-  
+
+        useEffect(() => {
+        
+            profileLoad();
+            
+            
+        }, [])
+        
+        useEffect(() => {
+        if (profileData) {
+            EditLoad()
+        }
+                     
+            
+        }, [profileData])
     
 
     useEffect(() => {
-    
-        
-        profileLoad(); 
-
-        EditLoad();
+        if(uriCameraCapture){
+            AlterarFotoPerfil()
+        }
        
-            
         
-
-    
-
-        
-
-        
-    }, [])
+    }, [uriCameraCapture])
 
    
 
@@ -77,10 +99,13 @@ export const PatientProfile = ({ navigation }) => {
     return (
         <Container>
             {open ? (<CameraModal
+            setUriCameraCapture={setsetUriCameraCapture}
             getMediaLibrary={true}
+            fecharModal={setOpen}
+            // attPhotoProfile={ () => AlterarFotoPerfil() }
             />) : (<></>)}
             <ContainerImage>
-            <ImgProfile source={require("../assets/img/chewie.jpg")} />
+            <ImgProfile source={{uri : uriCameraCapture}} />
 
             <ButtonCamera
             onPress={() => {setOpen(true)}}

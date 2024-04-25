@@ -50,7 +50,11 @@ export default function App() {
       <Stack.Navigator
         screenOptions={ { headerShown: false } }
       >
-
+  <Stack.Screen
+          name="InsertMedRecord" //nome da tela
+          component={InsertMedRecord} //componente q será chamado
+          options={{ title: 'InsertMedRecord' }} //titulo da tela
+        />
         <Stack.Screen
           name="Login" //nome da tela
           component={Login} //componente q será chamado
@@ -122,11 +126,7 @@ export default function App() {
           options={{ title: 'SelectDate' }} //titulo da tela
         />
 
-        <Stack.Screen
-          name="InsertMedRecord" //nome da tela
-          component={InsertMedRecord} //componente q será chamado
-          options={{ title: 'InsertMedRecord' }} //titulo da tela
-        />
+      
 
         <Stack.Screen
           name="PatientProfile" //nome da tela
