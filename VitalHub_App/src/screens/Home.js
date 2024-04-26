@@ -12,7 +12,7 @@ import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import moment from "moment";
-import { UserIcon } from "../components/Header/Style";
+import api from "../Service/Service";
 
     // async function ListarConsultas() {
 

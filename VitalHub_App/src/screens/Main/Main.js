@@ -9,7 +9,8 @@ const BottomTab = createBottomTabNavigator();
 import Home from "../Home";
 import PatientProfile from "../PatientProfile";
 
-export const Main = () => {
+export const Main = ({route, navigation}) => {
+    
     return (
         <BottomTab.Navigator 
             //Definindo rota inicial
@@ -57,10 +58,9 @@ export const Main = () => {
                 component={Home}
             />
             
-            <BottomTab.Screen
-                name="Perfil"
-                component={PatientProfile}
-            />
+            <BottomTab.Screen name="Perfil">
+                { (props) => <PatientProfile navigation={navigation} route={route} /> }
+            </BottomTab.Screen>
 
         </BottomTab.Navigator>
     )

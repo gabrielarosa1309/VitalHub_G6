@@ -23,8 +23,6 @@ export const PatientProfile = ({ navigation }) => {
         // console.log(info)
     }
 
-
-
     async function profileLoad() {
         const data = await userDecodeToken();
         setUserData(data)
@@ -32,23 +30,48 @@ export const PatientProfile = ({ navigation }) => {
 
     async function EditLoad() {
         const data = await AsyncStorage.getItem('profileInfo');
-                console.log(data);
+        console.log(data);
         if (data === null) {
-            setProfileData({dataNascimento: "DD/MM/AAAA",
+            setProfileData({
+                dataNascimento: "DD/MM/AAAA",
                 cpf: "cpf",
                 endereco: "endereco",
                 cep: "cep",
-                cidade: "cidade"})}
-                else{
-                    
-                    setProfileData(JSON.parse(data))
-                    console.log("dados edit");
-                   console.log(profileData);
-                }
+                cidade: "cidade"
+            })
         }
+        else {
+
+            setProfileData(JSON.parse(data))
+            console.log("dados edit");
+            console.log(profileData);
+        }
+    }
+
+    async function AlterarFotoPerfil() {
+        const formData = new FormData();
+
+        formData.append("Arquivo", {
+            uri : uriCameraCapture,
+            name : `image.${ uriCameraCapture.split(".")[1] }`,
+            type: `image/${ uriCameraCapture.split(".")[1] }`
+        })
+
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${profile.user}`, formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data"
+            }
+        }).then( response => {
+            await setProfileUpdate({
+                
+            })
+        }).then( error => {
+            console.log(error);
+        })
+    }
 
     useEffect(() => {
-        profileLoad(); 
+        profileLoad();
         EditLoad();
     }, [])
 
@@ -73,21 +96,21 @@ export const PatientProfile = ({ navigation }) => {
                 <BoxInput>
                     <TitleInput> Data de nascimento </TitleInput>
                     <InputBlock>
-                    {profileData.dataNascimento}
+                        {profileData.dataNascimento}
                     </InputBlock>
                 </BoxInput>
 
                 <BoxInput>
                     <TitleInput> CPF </TitleInput>
                     <InputBlock>
-                    {profileData.cpf}
+                        {profileData.cpf}
                     </InputBlock>
                 </BoxInput>
 
                 <BoxInput>
                     <TitleInput> Endereço </TitleInput>
                     <InputBlock>
-                    {profileData.endereco}
+                        {profileData.endereco}
                     </InputBlock>
                 </BoxInput>
 
@@ -95,14 +118,14 @@ export const PatientProfile = ({ navigation }) => {
                     <BoxInputRow>
                         <TitleInput> Cep </TitleInput>
                         <InputBodyRow>
-                        {profileData.cep}
+                            {profileData.cep}
                         </InputBodyRow>
                     </BoxInputRow>
 
                     <BoxInputRow>
                         <TitleInput> Cidade </TitleInput>
                         <InputBodyRow>
-                        {profileData.cidade}
+                            {profileData.cidade}
                         </InputBodyRow>
                     </BoxInputRow>
                 </DirectionRow>
