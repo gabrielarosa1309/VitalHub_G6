@@ -50,10 +50,10 @@ export default function App() {
       <Stack.Navigator
         screenOptions={ { headerShown: false } }
       >
-  <Stack.Screen
-          name="InsertMedRecord" //nome da tela
-          component={InsertMedRecord} //componente q será chamado
-          options={{ title: 'InsertMedRecord' }} //titulo da tela
+     <Stack.Screen
+          name="PatientVisuRecord" //nome da tela
+          component={PatientVisuRecord} //componente q será chamado
+          options={{ title: 'PatientVisuRecord' }} //titulo da tela
         />
         <Stack.Screen
           name="Login" //nome da tela
@@ -151,12 +151,13 @@ export default function App() {
           component={EditPatientProfile} //componente q será chamado
           options={{ title: 'EditPatientProfile' }} //titulo da tela
         />
-        <Stack.Screen
-          name="PatientVisuRecord" //nome da tela
-          component={PatientVisuRecord} //componente q será chamado
-          options={{ title: 'PatientVisuRecord' }} //titulo da tela
-        />
+     
 
+        <Stack.Screen
+          name="InsertMedRecord" //nome da tela
+          component={InsertMedRecord} //componente q será chamado
+          options={{ title: 'InsertMedRecord' }} //titulo da tela
+        />
       </Stack.Navigator>
 
     </NavigationContainer>

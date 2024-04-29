@@ -33,7 +33,7 @@ export const InsertMedRecord = () => {
     async function InserirExame() {
         
         const formData = new FormData();
-       
+       formData.append()
         //FALTOU COLOCAR O ID DO PRONTUARIO AQUI COM FORM.APPEND PUXANDO O ID DA API COM UM GET E TESTAR ESTA FUNCAO
       formData.append("Arquivo", 
         {

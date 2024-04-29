@@ -16,7 +16,7 @@ import { LastPhoto } from './Style';
 
 
 const CameraModal = ({
-     navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
+    navigation, visible, setUriCameraCapture, setShowCameraModal, fecharModal, getMediaLibrary = false, ...rest
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null) //capturar foto ou selecionada da galeria
@@ -64,7 +64,7 @@ if ( !result.canceled ) {
             //     })
 
             setUriCameraCapture(photo)
-
+         
             fecharModal(false)
         }
     }
