@@ -50,6 +50,13 @@ export default function App() {
       <Stack.Navigator
         screenOptions={ { headerShown: false } }
       >
+
+        
+<Stack.Screen
+          name="SelectDate" //nome da tela
+          component={SelectDate} //componente q será chamado
+          options={{ title: 'SelectDate' }} //titulo da tela
+        />
      <Stack.Screen
           name="PatientVisuRecord" //nome da tela
           component={PatientVisuRecord} //componente q será chamado
@@ -120,11 +127,6 @@ export default function App() {
           options={{ title: 'SelectDoctor' }} //titulo da tela
         />
 
-        <Stack.Screen
-          name="SelectDate" //nome da tela
-          component={SelectDate} //componente q será chamado
-          options={{ title: 'SelectDate' }} //titulo da tela
-        />
 
       
 

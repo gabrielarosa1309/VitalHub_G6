@@ -7,6 +7,7 @@ import { AppModal, ContainerInfoBox, Content, InfoBox, ModalContent, ModalTxtRes
 import { useState } from "react";
 import AppStatusModal from "../AppStatusModal/AppStatusModal";
 import * as Notifications from "expo-notifications";
+import moment from "moment";
 
 //Solicitar as permissoes de notificacoes 
 Notifications.requestPermissionsAsync();
@@ -21,7 +22,7 @@ Notifications.setNotificationHandler({
 });
 
 const AppResumeModal = ({
-    navigation, visible, setShowAppResume, ...rest
+    navigation, visible, setShowAppResume, agendamento, route, ...rest
 }) => {
     const [showAppStatus, setShowAppStatus] = useState(false);
 
@@ -47,7 +48,7 @@ const AppResumeModal = ({
         });
     }
 
-    const handlePress = () => {
+    const handlePress = ({agendamento, navigation, route}) => {
         setShowAppStatus(true);
         handleCallNotifications();
        };
@@ -64,23 +65,23 @@ const AppResumeModal = ({
                     <ContainerInfoBox>
                         <InfoBox>
                             <TitleInput> Data da consulta </TitleInput>
-                            <Content> 1 de Novembro de 2024 </Content>
+                            <Content> {moment(agendamento.dataConsulta).format("DD/MM/YYYY")} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Médico(a) da consulta </TitleInput>
-                            <Content> Dra Alessandra </Content>
-                            <Content> Demartóloga, Esteticista </Content>
+                            <Content> {agendamento.medicoLabel} </Content>
+                            <Content> {agendamento.clinicaLabel} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Local da consulta </TitleInput>
-                            <Content> São Paulo, SP </Content>
+                            <Content> {agendamento.localizacao} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Tipo de consulta </TitleInput>
-                            <Content> Rotina </Content>
+                            <Content> {agendamento.prioridadeLabel} </Content>
                         </InfoBox>
                     </ContainerInfoBox>
 
