@@ -1,16 +1,16 @@
-import {  useEffect, useState } from "react";
-import { Container, ContainerScroll } from "../components/Container/Style";
-import { Button, ButtonCamera, ButtonTxt, ContainerImage, ExitButton } from "../components/EntryButton/Style";
+import { useEffect, useState } from "react";
+import { Container, ContainerImage, ContainerScroll } from "../components/Container/Style";
+import { Button, ButtonCamera, ButtonTxt, ExitButton } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
-import { userDecodeToken } from "../utils/auth/auth"
-import {MaterialCommunityIcons} from '@expo/vector-icons'
-import CameraModal from "../components/CameraModal/CameraModal";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import api from "../Service/Service";
+import { userDecodeToken } from "../utils/auth/auth";
+import CameraModal from "../components/CameraModal/CameraModal";
 
-export const PatientProfile = ({ navigation, route }) => {
+export const PatientProfile = ({ navigation }) => {
+    const [openModal, setOpenModal] = useState(false)
     const [userData, setUserData] = useState({})
     const [profileData, setProfileData] = useState({})
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
@@ -61,7 +61,6 @@ export const PatientProfile = ({ navigation, route }) => {
                     setProfileData(JSON.parse(data))
           
                 }
-                
         }
 
         useEffect(() => {
@@ -87,11 +86,6 @@ export const PatientProfile = ({ navigation, route }) => {
        
         
     }, [uriCameraCapture])
-
-   
-
-   
-
 
     return (
         <Container>
@@ -163,9 +157,12 @@ export const PatientProfile = ({ navigation, route }) => {
                     <ButtonTxt> Sair </ButtonTxt>
                 </Button>
 
+                {openModal ? (<CameraModal getMediaLibrary={true} />) : (<></>)}
+
             </ContainerScroll>
 
         </Container>
     );
-    }
+}
+
 export default PatientProfile;

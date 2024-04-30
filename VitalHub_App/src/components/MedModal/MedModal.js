@@ -18,6 +18,7 @@ const MedModal = ({
     ...rest
 }) => {
     async function handleClose(screen) {
+        console.log(consulta)
         await setShowMedModal(false)
         
         if (screen == "Location") {

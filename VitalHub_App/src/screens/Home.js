@@ -11,12 +11,8 @@ import AppointmentButton from "../components/AppointmentButton/AppointmentButton
 import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
-import api from "../Service/Service";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import { UserIcon } from "../components/Header/Style";
-
-    
 
     // async function ListarConsultas() {
 
