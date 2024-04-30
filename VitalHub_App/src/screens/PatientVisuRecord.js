@@ -24,7 +24,7 @@ async function OcrPost() {
     
     const formData = new FormData();
        
-      formData.append("Arquivo", 
+      formData.append("Image", 
         {
             uri: uriCameraCapture,
             name: `image.${uriCameraCapture.split(".")[1]}`,

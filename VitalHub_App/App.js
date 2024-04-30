@@ -52,16 +52,8 @@ export default function App() {
       >
 
         
-<Stack.Screen
-          name="SelectDate" //nome da tela
-          component={SelectDate} //componente q será chamado
-          options={{ title: 'SelectDate' }} //titulo da tela
-        />
-     <Stack.Screen
-          name="PatientVisuRecord" //nome da tela
-          component={PatientVisuRecord} //componente q será chamado
-          options={{ title: 'PatientVisuRecord' }} //titulo da tela
-        />
+
+     
         <Stack.Screen
           name="Login" //nome da tela
           component={Login} //componente q será chamado
@@ -159,6 +151,18 @@ export default function App() {
           name="InsertMedRecord" //nome da tela
           component={InsertMedRecord} //componente q será chamado
           options={{ title: 'InsertMedRecord' }} //titulo da tela
+        />
+        
+
+        <Stack.Screen
+          name="SelectDate" //nome da tela
+          component={SelectDate} //componente q será chamado
+          options={{ title: 'SelectDate' }} //titulo da tela
+        />
+        <Stack.Screen
+          name="PatientVisuRecord" //nome da tela
+          component={PatientVisuRecord} //componente q será chamado
+          options={{ title: 'PatientVisuRecord' }} //titulo da tela
         />
       </Stack.Navigator>
 
