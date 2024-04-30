@@ -30,8 +30,9 @@ export const PatientProfile = ({ navigation, route }) => {
                 type: `image/${uriCameraCapture.split(".")[1]}`
             })
 
-        console.log("form data");
-        console.log(formData);
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
+        .then((response) => {console.log(response.status); setUserData({ ...userData, foto : uriCameraCapture})})
+        .catch((error) => console.log(error)) 
 
         await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: { "Content-Type": "multipart/form-data" } })
             .then((response) => { console.log(response.status); setUserData({ ...userData, foto: uriCameraCapture }) })
@@ -81,10 +82,9 @@ export const PatientProfile = ({ navigation, route }) => {
     return (
         <Container>
             {open ? (<CameraModal
-                setUriCameraCapture={setsetUriCameraCapture}
-                getMediaLibrary={true}
-                fecharModal={setOpen}
-            // attPhotoProfile={ () => AlterarFotoPerfil() }
+            setUriCameraCapture={setsetUriCameraCapture}
+            getMediaLibrary={true}
+            fecharModal={setOpen}
             />) : (<></>)}
             <ContainerImage>
                 <ImgProfile source={{ uri: uriCameraCapture }} />

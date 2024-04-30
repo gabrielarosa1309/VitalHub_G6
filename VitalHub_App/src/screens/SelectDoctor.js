@@ -58,7 +58,7 @@ export const SelectDoctor = ({ navigation, route }) => {
                         name={item.idNavigation.nome}
                         especialidade={item.especialidade.especialidade1}
                         clickButton={selectDoctor}
-                        onPress={() => { setMedicoLista({ medicoClinicaId: item.id, medicoLabel: item.idNavigation.nome }), setSelectDoctor(true); setIdConfirm(item.id) }}
+                        onPress={() => { setMedico({ medicoClinicaId: item.id, medicoLabel: item.idNavigation.nome }), setSelectDoctor(true); setIdConfirm(item.id) }}
                         index={idConfirm}
                         doctorId={item.id}
                     />

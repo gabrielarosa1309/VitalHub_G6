@@ -59,7 +59,7 @@ const CameraModal = ({
             //     })
 
             setUriCameraCapture(photo)
-
+         
             fecharModal(false)
         }
     }

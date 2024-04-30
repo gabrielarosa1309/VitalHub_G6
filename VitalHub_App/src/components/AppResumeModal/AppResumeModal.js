@@ -7,6 +7,7 @@ import { AppModal, ContainerInfoBox, Content, InfoBox, ModalContent, ModalTxtRes
 import { useState } from "react";
 import AppStatusModal from "../AppStatusModal/AppStatusModal";
 import * as Notifications from "expo-notifications";
+import moment from "moment";
 
 //Solicitar as permissoes de notificacoes 
 Notifications.requestPermissionsAsync();
@@ -21,7 +22,7 @@ Notifications.setNotificationHandler({
 });
 
 const AppResumeModal = ({
-    navigation, visible, setShowAppResume, ...rest
+    navigation, visible, setShowAppResume, agendamento, route, ...rest
 }) => {
     const [showAppStatus, setShowAppStatus] = useState(false);
 
@@ -47,40 +48,54 @@ const AppResumeModal = ({
         });
     }
 
-    const handlePress = () => {
+    const handlePress = ({agendamento, navigation, route}) => {
         setShowAppStatus(true);
         handleCallNotifications();
        };
 
+    async function ConfirmarConsulta() {
+        await api.post("/Consultas/Cadastrar", {
+            ... agendamento,
+            pacienteId : profile.user,
+            situacaoId : '3EF5B05E-17F4-4F54-9516-978DF709B7BA'
+        }).then(async response => {
+            await setShowAppResume(false);
+            navigation.replace("Main");
+        }).catch(error => {
+            console.log(error);
+        })
+    }
+
     return (
         <Modal {...rest} visible={visible} transparent={true} animationType="fade">
 
+
             <AppModal>
                 <ModalContent>
-                    <Title> Agendar consulta </Title>
+                    {/* <Title> Agendar consulta </Title>
 
                     <ModalTxtResume> Consulte os dados selecionados para a sua consulta </ModalTxtResume>
 
                     <ContainerInfoBox>
                         <InfoBox>
                             <TitleInput> Data da consulta </TitleInput>
-                            <Content> 1 de Novembro de 2024 </Content>
+                            <Content> {moment(agendamento.dataConsulta).format("DD/MM/YYYY")} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Médico(a) da consulta </TitleInput>
-                            <Content> Dra Alessandra </Content>
-                            <Content> Demartóloga, Esteticista </Content>
+                            <Content> {agendamento.medicoLabel} </Content>
+                            <Content> {agendamento.clinicaLabel} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Local da consulta </TitleInput>
-                            <Content> São Paulo, SP </Content>
+                            <Content> {agendamento.localizacao} </Content>
                         </InfoBox>
 
                         <InfoBox>
                             <TitleInput> Tipo de consulta </TitleInput>
-                            <Content> Rotina </Content>
+                            <Content> {agendamento.prioridadeLabel} </Content>
                         </InfoBox>
                     </ContainerInfoBox>
 
@@ -88,7 +103,7 @@ const AppResumeModal = ({
                         visible={showAppStatus}
                         setShowAppStatus={setShowAppStatus}
                         navigation={navigation}
-                    />
+                    /> */}
 
                     <BtnModal onPress={handlePress}>
                         <ButtonTxt> Confirmar </ButtonTxt>
