@@ -11,52 +11,52 @@ import PatientProfile from "../PatientProfile";
 
 export const Main = () => {
     return (
-        <BottomTab.Navigator 
+        <BottomTab.Navigator
             //Definindo rota inicial
             initialRouteName="Home"
-            screenOptions={ ({ route }) => ({
-                tabBarStyle:{ backgroundColor: "#FFFFFF", height: 80, borderRadius: 30 },
+            screenOptions={({ route }) => ({
+                tabBarStyle: { backgroundColor: "#FFFFFF", height: 80, borderRadius: 30 },
                 tabBarActiveBackgroundColor: "transparent",
                 tabBarShowLabel: false,
                 headerShown: false,
 
                 tabBarIcon: ({ focused }) => {
-                    if( route.name === "Home" ) {
+                    if (route.name === "Home") {
                         return (
-                            <ContentIcon 
-                                tabBarActiveBackgroundColor={ focused ? "#ECF2FF" : "transparent"}
+                            <ContentIcon
+                                tabBarActiveBackgroundColor={focused ? "#ECF2FF" : "transparent"}
                             >
                                 <FontAwesome
                                     name='calendar-check-o'
                                     size={22}
                                     color="#4E4B59"
                                 />
-                                { focused && <TextIcon>Agenda</TextIcon> }
+                                {focused && <TextIcon>Agenda</TextIcon>}
                             </ContentIcon>
                         )
-                    }else {
+                    } else {
                         return (
-                            <ContentIcon 
-                                tabBarActiveBackgroundColor={ focused ? "#ECF2FF" : "transparent"}
+                            <ContentIcon
+                                tabBarActiveBackgroundColor={focused ? "#ECF2FF" : "transparent"}
                             >
                                 <FontAwesome5
                                     name="user-circle"
                                     size={22}
                                     color="#4E4B59"
                                 />
-                                { focused && <TextIcon>Perfil</TextIcon> }
+                                {focused && <TextIcon>Perfil</TextIcon>}
                             </ContentIcon>
                         )
                     }
                 }
-            }) }
+            })}
         >
 
             <BottomTab.Screen
                 name="Home"
                 component={Home}
             />
-            
+
             <BottomTab.Screen
                 name="Perfil"
                 component={PatientProfile}

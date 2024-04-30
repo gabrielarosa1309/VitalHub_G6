@@ -12,30 +12,30 @@ import { PatientAppCard } from "../components/PatientAppCard/PatientAppCard";
 import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import moment from "moment";
-import { UserIcon } from "../components/Header/Style";
+import api from "../Service/Service";
 
-    // async function ListarConsultas() {
+// async function ListarConsultas() {
 
-    //     try {
-    //         const token = JSON.parse( await AsyncStorage.getItem("token") ).token
-           
-    //         console.log("token");
-    //         console.log(token);
+//     try {
+//         const token = JSON.parse( await AsyncStorage.getItem("token") ).token
 
-    //         const resApi = await api.get("/Consultas", {
-    //             headers: {
+//         console.log("token");
+//         console.log(token);
 
-    //                 "Authorization": `Bearer ${token}`
-    //             }
-    //         })
-    //         console.log(resApi.data);
-    //     setListaConsultas(resApi.data)
+//         const resApi = await api.get("/Consultas", {
+//             headers: {
 
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-       
-    // }
+//                 "Authorization": `Bearer ${token}`
+//             }
+//         })
+//         console.log(resApi.data);
+//     setListaConsultas(resApi.data)
+
+//     } catch (error) {
+//         console.log(error);
+//     }
+
+// }
 
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
@@ -52,15 +52,12 @@ export const Home = ({ navigation }) => {
     //State para armazenar informacoes dos cards para atualizar os status
     const [putId, setPutId] = useState("");
 
-  
-
     async function profileLoad() {
         const token = await userDecodeToken();
         if (token) {
             setProfile(token)
             setInfo(token)
-
-            setDataConsulta( moment().format("YYYY-MM-DD") )
+            setDataConsulta(moment().format("YYYY-MM-DD"))
         }
     }
 
@@ -70,18 +67,19 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                
+
             }).catch(error => {
                 console.log(error);
             })
     }
 
     async function CancelConsult() {
-
-       await api.put(`/Consultas/Status`, {id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5"})
-       .then(response => {if (response.status == 200) {
-        setShowModalCancel(false)
-       }})
+        await api.put(`/Consultas/Status`, { id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5" })
+            .then(response => {
+                if (response.status == 200) {
+                    setShowModalCancel(false)
+                }
+            })
             .catch(error => {
                 console.log(error);
             })
@@ -89,22 +87,17 @@ export const Home = ({ navigation }) => {
 
     useEffect(() => {
         profileLoad();
-    
-        
     }, [])
 
     useEffect(() => {
-
-       
-        
         if (dataConsulta != '') {
             ListarConsultas();
         }
-        }, [dataConsulta, showModalCancel])
+    }, [dataConsulta, showModalCancel])
 
     function MostrarModal(modal, consulta) {
         setConsultaSelecionada(consulta)
-        
+
         if (modal == 'cancelar') {
             setShowModalCancel(true)
         } else {
@@ -113,10 +106,7 @@ export const Home = ({ navigation }) => {
     }
 
     return (
-        
         <Container>
-          
-
             <Header
                 img={require("../assets/img/chewie.jpg")}
                 name={info.name}
@@ -171,11 +161,10 @@ export const Home = ({ navigation }) => {
                 }
             />
 
-            <AppointmentButton onPress={() => setShowModalApp(true)} />
+            {profile.role === "Paciente" ? (<AppointmentButton onPress={() => setShowModalApp(true)} />) : (<></>)}
 
             <CancelModal
-            onPressConfirm={() => CancelConsult()}
-                
+                onPressConfirm={() => CancelConsult()}
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
@@ -193,9 +182,7 @@ export const Home = ({ navigation }) => {
                 visible={showModalApp}
                 setShowModalApp={setShowModalApp}
                 navigation={navigation}
-                
             />
-
         </Container>
     );
 }

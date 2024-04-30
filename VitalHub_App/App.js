@@ -18,7 +18,6 @@ const Stack = createNativeStackNavigator();
 import { useFonts, MontserratAlternates_700Bold, MontserratAlternates_600SemiBold, MontserratAlternates_500Medium } from "@expo-google-fonts/montserrat-alternates";
 import { Quicksand_400Regular, Quicksand_500Medium, Quicksand_600SemiBold, Quicksand_700Bold } from "@expo-google-fonts/quicksand";
 import SelectDate from "./src/screens/SelectDate";
-import HomeMed from "./src/screens/HomeMed";
 import InsertMedRecord from "./src/screens/InsertMedRecord";
 import Location from "./src/screens/Location";
 import MedPatientRecord from "./src/screens/MedPatientRecord";
@@ -48,9 +47,8 @@ export default function App() {
 
       {/* Componente para navegação */}
       <Stack.Navigator
-        screenOptions={ { headerShown: false } }
+        screenOptions={{ headerShown: false }}
       >
-
         <Stack.Screen
           name="Login" //nome da tela
           component={Login} //componente q será chamado
@@ -62,22 +60,10 @@ export default function App() {
           component={Main}
         />
 
-        {/* <Stack.Screen
-          name="Navigation" //nome da tela
-          component={Navigation} //componente q será chamado
-          options={{title: 'Navigation'}} //titulo da tela
-        /> */}
-
         <Stack.Screen
           name="Home" //nome da tela
           component={Home} //componente q será chamado
           options={{ title: 'Home' }} //titulo da tela
-        />
-
-        <Stack.Screen
-          name="HomeMed" //nome da tela
-          component={HomeMed} //componente q será chamado
-          options={{ title: 'HomeMed' }} //titulo da tela
         />
 
         <Stack.Screen
@@ -123,12 +109,6 @@ export default function App() {
         />
 
         <Stack.Screen
-          name="InsertMedRecord" //nome da tela
-          component={InsertMedRecord} //componente q será chamado
-          options={{ title: 'InsertMedRecord' }} //titulo da tela
-        />
-
-        <Stack.Screen
           name="PatientProfile" //nome da tela
           component={PatientProfile} //componente q será chamado
           options={{ title: 'PatientProfile' }} //titulo da tela
@@ -157,6 +137,11 @@ export default function App() {
           options={{ title: 'PatientVisuRecord' }} //titulo da tela
         />
 
+        <Stack.Screen
+          name="InsertMedRecord" //nome da tela
+          component={InsertMedRecord} //componente q será chamado
+          options={{ title: 'InsertMedRecord' }} //titulo da tela
+        />
       </Stack.Navigator>
 
     </NavigationContainer>
