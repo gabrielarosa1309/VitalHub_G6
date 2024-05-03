@@ -9,7 +9,7 @@ import api from "../Service/Service";
 import { ClinicCardSelect } from "../components/ClinicCardSelect/ClinicCardSelect";
 
 
-export const SelectClinic = ({ navigation }) => {
+export const SelectClinic = ({ navigation,}) => {
 
     //State Listagem API Clinicas 
     const [clinicaLista, setClinicaLista] = useState([])
@@ -56,6 +56,7 @@ export const SelectClinic = ({ navigation }) => {
                         onPress={() => { setSelectClinic(true); setIdConfirm(item.id) }}
                         index={idConfirm}
                         clinicId={item.id}
+                        route={item.id}
                     />
                 )} />
 

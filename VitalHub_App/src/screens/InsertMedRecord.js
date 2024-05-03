@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollViewBase, View } from "react-native";
+import { ScrollView, ScrollViewBase, View } from "react-native";
 import { ProfileData } from "../components/AppointmentCard/Style";
-import { Container } from "../components/Container/Style";
+import { Container, ContainerImage } from "../components/Container/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { ContentTxt } from "../components/MedRecordModal/Style";
 import { Title, TitleInput } from "../components/Title/Style";
 import { BigInputInsert, BoxInput, BoxInputMed, InputInsert } from "../components/Input/Style";
-import { Button, ButtonCamera, ButtonTxt, ContainerImage } from "../components/EntryButton/Style";
+import { Button, ButtonCamera, ButtonTxt, } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Text } from "react-native";
 import CameraModal from '../components/CameraModal/CameraModal';
 import { userDecodeToken } from '../utils/Auth';
-import { ScrollView } from 'react-native-web';
 
-export const InsertMedRecord = () => {
+
+export const InsertMedRecord = ({route}) => {
     const [descricao, setDescricao] = useState('');
     const [diagnostico, setDiagnostico] = useState('');
     const [prescricao, setPrescricao] = useState('');
@@ -30,26 +30,7 @@ export const InsertMedRecord = () => {
     }
 
 
-    async function InserirExame() {
-        
-        const formData = new FormData();
-       formData.append()
-        //FALTOU COLOCAR O ID DO PRONTUARIO AQUI COM FORM.APPEND PUXANDO O ID DA API COM UM GET E TESTAR ESTA FUNCAO
-      formData.append("Arquivo", 
-        {
-            uri: uriCameraCapture,
-            name: `image.${uriCameraCapture.split(".").pop()}`,
-            type: `image/${uriCameraCapture.split(".").pop()}`
-        })
-
-       console.log("form data"); 
-console.log(formData);
-
-        await api.put(`/Exame/Cadastrar`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
-        .then((response) => {setDescricao( descricao + "\n" + response.data.descricao); setUserData({ ...userData, foto : uriCameraCapture})})
-        .catch((error) => console.log(error)) 
-
-    }
+    
 
     async function AlterarFotoPerfil() {
         
@@ -121,12 +102,12 @@ console.log(formData);
     return (
         <Container>
            
-              {open ? (<CameraModal
+               {open ? (<CameraModal
             setUriCameraCapture={setsetUriCameraCapture}
             getMediaLibrary={true}
             fecharModal={setOpen}
             // attPhotoProfile={ () => AlterarFotoPerfil() }
-            />) : (<></>)}
+            />) : (<></>)} 
             
             <ContainerImage>
             <ImgProfile source={{uri : uriCameraCapture}} />
@@ -184,7 +165,7 @@ console.log(formData);
             <LinkCancel>
                 Cancelar
             </LinkCancel>
-            
+    
         </Container>
         
     );

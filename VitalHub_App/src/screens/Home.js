@@ -13,6 +13,7 @@ import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import moment from "moment";
 import { UserIcon } from "../components/Header/Style";
+import api from "../Service/Service";
 
     // async function ListarConsultas() {
 
@@ -70,7 +71,7 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                
+                console.log(response.data);
             }).catch(error => {
                 console.log(error);
             })
@@ -165,7 +166,7 @@ export const Home = ({ navigation }) => {
                             
                             onPressMedModal={() => MostrarModal('prontuario', item)}
                             onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
-                            
+                            onPressPront={() => {profile.role == "Medico" ? navigation.replace("PatientVisuRecord", {idConsulta : item.id}) : navigation.replace("InsertMedRecord") }}
                         />
                     )
                 }

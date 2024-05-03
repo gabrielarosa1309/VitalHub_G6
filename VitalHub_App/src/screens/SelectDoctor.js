@@ -7,7 +7,7 @@ import { ListComponent } from "../components/List/List";
 import { DoctorCardSelect } from "../components/DoctorCardSelect/DoctorCardSelect";
 import { useEffect, useState } from "react";
 
-export const SelectDoctor = ({ navigation }) => {
+export const SelectDoctor = ({ navigation, route }) => {
 
     //State Listagem API Medicos
     const [medicoLista, setMedicoLista] = useState([])
@@ -20,7 +20,7 @@ export const SelectDoctor = ({ navigation }) => {
 
     async function ListarMedicos() {
         try {
-            const resApi = await api.get("/Medicos")
+            const resApi = await api.get(`Medicos/BuscarPorIdClinica?id=${route.params.route}`)
             setMedicoLista(resApi.data)
 
         } catch (error) {

@@ -58,7 +58,7 @@ const AppResumeModal = ({
 
             <AppModal>
                 <ModalContent>
-                    <Title> Agendar consulta </Title>
+                    {/* <Title> Agendar consulta </Title>
 
                     <ModalTxtResume> Consulte os dados selecionados para a sua consulta </ModalTxtResume>
 
@@ -89,7 +89,7 @@ const AppResumeModal = ({
                         visible={showAppStatus}
                         setShowAppStatus={setShowAppStatus}
                         navigation={navigation}
-                    />
+                    /> */}
 
                     <BtnModal onPress={handlePress}>
                         <ButtonTxt> Confirmar </ButtonTxt>
