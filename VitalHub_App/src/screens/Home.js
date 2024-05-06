@@ -14,29 +14,6 @@ import { userDecodeToken } from "../utils/auth/auth";
 import moment from "moment";
 import api from "../Service/Service";
 
-// async function ListarConsultas() {
-
-//     try {
-//         const token = JSON.parse( await AsyncStorage.getItem("token") ).token
-
-//         console.log("token");
-//         console.log(token);
-
-//         const resApi = await api.get("/Consultas", {
-//             headers: {
-
-//                 "Authorization": `Bearer ${token}`
-//             }
-//         })
-//         console.log(resApi.data);
-//     setListaConsultas(resApi.data)
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-
-// }
-
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
     const [info, setInfo] = useState({})
@@ -74,7 +51,7 @@ export const Home = ({ navigation }) => {
     }
 
     async function CancelConsult() {
-        await api.put(`/Consultas/Status`, { id: putId, situacaoId: "54B4296D-6ABF-4F05-AA86-42506E53CAE5" })
+        await api.put(`/Consultas/Status?idConsulta=${putId}&status=Cancelados`)
             .then(response => {
                 if (response.status == 200) {
                     setShowModalCancel(false)
@@ -155,7 +132,6 @@ export const Home = ({ navigation }) => {
                             
                             onPressMedModal={() => MostrarModal('prontuario', item)}
                             onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
-                            
                         />
                     )
                 }

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 import { Container } from "../components/Container/Style";
-import { ImgLocal } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { LinkCancel } from "../components/Links/Style";
-import { Subtitle, Title, TitleInput, TitleLocation } from "../components/Title/Style";
+import { Subtitle, TitleInput, TitleLocation } from "../components/Title/Style";
 import { ActivityIndicator } from "react-native";
 import api from "../Service/Service";
 

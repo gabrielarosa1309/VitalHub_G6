@@ -36,10 +36,17 @@ const CancelModal = ({
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: "Consulta cancelada",
-                body: "Infelizmente a consulta do tipo Rotina com o Dr. Claudio no dia 26/09/2089 as 14:00 foi cancelada."
+                body: "Infelizmente a consulta foi cancelada."
             },
             trigger: null
         });
+    }
+
+    const handleConfirmAndNotify = async () => {
+        if (onPressConfirm) {
+            await onPressConfirm();
+        }
+        await handleCallNotifications();
     }
 
     return (
@@ -51,7 +58,7 @@ const CancelModal = ({
 
                     <ModalTxt> Ao cancelar essa consulta, abrirá uma possível disponibilidade no seu horário. Deseja mesmo cancelar essa consulta? </ModalTxt>
 
-                    <BtnModal onPress={onPressConfirm}>
+                    <BtnModal onPress={handleConfirmAndNotify}>
                         <ButtonTxt> Confirmar </ButtonTxt>
                     </BtnModal>
 
