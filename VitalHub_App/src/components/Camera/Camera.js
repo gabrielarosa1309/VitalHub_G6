@@ -24,7 +24,7 @@ export default function App() {
 
       setOpenModal(true)
 
-      console.log(photo);
+    
     }
   }
 

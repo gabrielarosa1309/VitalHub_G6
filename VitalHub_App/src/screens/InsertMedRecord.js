@@ -108,7 +108,7 @@ console.log(formData);
             fecharModal={setOpen}
             // attPhotoProfile={ () => AlterarFotoPerfil() }
             />) : (<></>)} 
-            
+            <ScrollView>
             <ContainerImage>
             <ImgProfile source={{uri : uriCameraCapture}} />
 
@@ -135,9 +135,7 @@ console.log(formData);
                 />
                 {descricaoError && <Text style={{ color: 'red' }}>{descricaoError}</Text>}
             </BoxInputMed>
-            <Button onPress={() => InserirExame()}>
-                <ButtonTxt> SALVAR </ButtonTxt>
-            </Button>
+            
             <BoxInputMed>
                 <TitleInput> Diagnóstico do paciente </TitleInput>
                 <InputInsert
@@ -160,12 +158,14 @@ console.log(formData);
                 {prescricaoError && <Text style={{ color: 'red' }}>{prescricaoError}</Text>}
             </BoxInputMed>
 
-      
+            {/* <Button onPress={() => InserirExame()}>
+            <ButtonTxt> SALVAR </ButtonTxt>
+            </Button>
 
             <LinkCancel>
                 Cancelar
-            </LinkCancel>
-    
+            </LinkCancel> */}
+            </ScrollView>
         </Container>
         
     );

@@ -71,7 +71,7 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                console.log(response.data);
+                
             }).catch(error => {
                 console.log(error);
             })
@@ -89,7 +89,13 @@ export const Home = ({ navigation }) => {
     }
 
     useEffect(() => {
-        profileLoad();
+
+    profileLoad(); 
+        
+   
+            
+    console.log(profile);
+       
     
         
     }, [])

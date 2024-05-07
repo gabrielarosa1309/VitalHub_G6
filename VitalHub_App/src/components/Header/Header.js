@@ -17,7 +17,6 @@ export const Header = ({
             setName(token.name);
         }
 
-        console.log(token)
     }
 
     useEffect(() => {

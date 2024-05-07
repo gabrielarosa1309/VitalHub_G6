@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text, Alert } from "react-native";
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('henrique@gmail.com')
+    const [email, setEmail] = useState('gabriela@gmail.com')
     const [senha, setSenha] = useState('123456')
     const [errorMessage, setErrorMessage] = useState(''); 
 
@@ -52,7 +52,7 @@ export const Login = ({ navigation }) => {
                 email: email,
                 senha: senha
             });
-console.log(response.status)
+
             await AsyncStorage.setItem('token', JSON.stringify(response.data));
             navigation.navigate("Main");
         } catch (error) {
