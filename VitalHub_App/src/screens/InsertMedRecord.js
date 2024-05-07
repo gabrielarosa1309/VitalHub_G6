@@ -11,9 +11,12 @@ import { LinkCancel } from "../components/Links/Style";
 import { Text } from "react-native";
 import CameraModal from '../components/CameraModal/CameraModal';
 import { userDecodeToken } from '../utils/Auth';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import api from '../Service/Service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const InsertMedRecord = ({route}) => {
+export const InsertMedRecord = ({navigation, route}) => {
     const [descricao, setDescricao] = useState('');
     const [diagnostico, setDiagnostico] = useState('');
     const [prescricao, setPrescricao] = useState('');
@@ -23,14 +26,26 @@ export const InsertMedRecord = ({route}) => {
     const [userData, setUserData] = useState({});
     const [open, setOpen] = useState(false);
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
-
+    const [infoConsulta, setInfoConsulta] = useState([])
     async function profileLoad() {
         const data = await userDecodeToken();
         setUserData(data)
     }
 
 
-    
+    async function GetInfoConsulta() {
+
+        const token = JSON.parse( await AsyncStorage.getItem("token") ).token //o .token Serve para desencapsular o token do json 
+      
+        const infoConsulta = await api.get(`/Consultas/BuscarPorId?id=${route.params.idConsulta}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+          }) 
+        console.log(infoConsulta.data);
+        setInfoConsulta(infoConsulta.data)
+        
+    }
 
     async function AlterarFotoPerfil() {
         
@@ -54,6 +69,13 @@ console.log(formData);
     useEffect(() => {
         
         profileLoad();
+        console.log(route.params.idConsulta);
+        
+    }, [])
+
+    useEffect(() => {
+        
+        GetInfoConsulta();
         
         
     }, [])
@@ -115,7 +137,14 @@ console.log(formData);
 
             <ButtonCamera
             onPress={() => {setOpen(true)}}
-            ></ButtonCamera>
+            >
+                <MaterialCommunityIcons 
+                name="camera-plus" 
+                size={20} 
+                color={'#fbfbfb'}
+                />
+
+            </ButtonCamera>
 
             </ContainerImage>
             <Title> Chewie </Title>
@@ -129,9 +158,10 @@ console.log(formData);
                 <TitleInput> Descrição da consulta </TitleInput>
                 <BigInputInsert
                     placeholder="Descrição"
-                    value={descricao}
+                    value={infoConsulta.descricao}
                     onChangeText={(txt) => setDescricao(txt)}
                     style={descricaoError ? { borderColor: 'red' } : {}}
+                    editable={false}
                 />
                 {descricaoError && <Text style={{ color: 'red' }}>{descricaoError}</Text>}
             </BoxInputMed>
@@ -140,9 +170,10 @@ console.log(formData);
                 <TitleInput> Diagnóstico do paciente </TitleInput>
                 <InputInsert
                     placeholder="Diagnóstico"
-                    value={diagnostico}
+                    value={infoConsulta.diagnostico}
                     onChangeText={(txt) => setDiagnostico(txt)}
                     style={diagnosticoError ? { borderColor: 'red' } : {}}
+                    editable={false}
                 />
                 {diagnosticoError && <Text style={{ color: 'red' }}>{diagnosticoError}</Text>}
             </BoxInputMed>
@@ -154,6 +185,7 @@ console.log(formData);
                     value={prescricao}
                     onChangeText={(txt) => setPrescricao(txt)}
                     style={prescricaoError ? { borderColor: 'red' } : {}}
+                    editable={false}
                 />
                 {prescricaoError && <Text style={{ color: 'red' }}>{prescricaoError}</Text>}
             </BoxInputMed>

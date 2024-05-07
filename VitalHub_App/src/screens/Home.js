@@ -172,7 +172,7 @@ export const Home = ({ navigation }) => {
                             
                             onPressMedModal={() => MostrarModal('prontuario', item)}
                             onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
-                            onPressPront={() => {profile.role == "Medico" ? navigation.replace("PatientVisuRecord", {idConsulta : item.id}) : navigation.replace("InsertMedRecord") }}
+                            onPressPront={() => {profile.role == "Medico" ? navigation.replace("PatientVisuRecord", {idConsulta : item.id}) : navigation.replace("InsertMedRecord", {idConsulta : item.id}) }}
                         />
                     )
                 }
