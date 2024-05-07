@@ -16,9 +16,12 @@ const nivelConsulta = [
     { id: '4DDDDD07-4EBF-4ABA-AA1B-0A44E927584D', tipo: "Urgência" },
 ]
 
+
+
 const AppointmentModal = ({
     navigation, visible, setShowModalApp, ...rest
 }) => {
+    const [focus, setFocus] = useState(false)
     const [showAppResume, setShowAppResume] = useState(false);
     const [agendamento, setAgendamento] = useState(null)
 

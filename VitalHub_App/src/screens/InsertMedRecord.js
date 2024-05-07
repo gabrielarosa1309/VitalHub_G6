@@ -124,10 +124,8 @@ export const InsertMedRecord = ({navigation, route}) => {
                 fecharModal={setOpen}
             // attPhotoProfile={ () => AlterarFotoPerfil() }
             />) : (<></>)} 
-            <Scroll>
-            <ContainerImage>
+             <ContainerImage>
             <ImgProfile source={{uri : uriCameraCapture}} />
-
 
             <ButtonCamera
             onPress={() => {setOpen(true)}}
@@ -139,15 +137,9 @@ export const InsertMedRecord = ({navigation, route}) => {
                 />
 
             </ButtonCamera>
-
-                <ButtonCamera onPress={() => { setOpen(true) }}>
-                    <MaterialCommunityIcons
-                        name="camera-plus"
-                        size={20}
-                        color={'#fbfbfb'}
-                    />
-                </ButtonCamera>
             </ContainerImage>
+            <Scroll>
+           
 
             <Title> Chewie </Title>
 

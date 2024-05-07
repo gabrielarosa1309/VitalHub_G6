@@ -7,7 +7,7 @@ export const AppModal = styled.View`
     background-color: rgba(0, 0, 0, 0.6);
 `
 export const ModalContent = styled.View`
-    height: 55%;
+    height: 75%;
     width: 100%;
     gap: 15px;
     position: absolute;
