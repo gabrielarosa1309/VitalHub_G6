@@ -54,7 +54,7 @@ export default function FullCalender({ selectedDate = '', handleSelectedDateFn =
                     handleSelectedDateFn(date.dateString)
                 }}>
                     <DayContainer isSelected={date.dateString == selectedDate}>
-                        <DayText isSelected={date.dateString == selectedDate} isDisabled={state == 'disabled'}>{ date.day }</DayText>
+                        <DayText isSelected={date.dateString == selectedDate} isDisabled={state == 'disabled'}>{date.day}</DayText>
                     </DayContainer>
                 </TouchableOpacity>
             }

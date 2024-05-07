@@ -10,7 +10,6 @@ export const ContainerProfileImage = styled.View`
 
 `
 
-
 export const ContainerLogin = styled(Container)`
     justify-content: center;
     gap: 20px;
@@ -31,6 +30,11 @@ export const ContainerScroll = styled.ScrollView.attrs({
         alignItems: 'center'
     },
 })``
+
+export const Scroll = styled(ContainerScroll)`
+    width: 85%;
+    margin-top: 20px;
+`
 
 export const ContainerImage = styled.View`
     width: 100%;

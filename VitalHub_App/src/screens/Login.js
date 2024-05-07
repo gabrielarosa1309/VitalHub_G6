@@ -43,7 +43,7 @@ export const Login = ({ navigation }) => {
         const senhaError = validateSenha(senha);
 
         if (emailError || senhaError) {
-            setErrorMessage("Email ou senha inválidos"); 
+            setErrorMessage("Email ou senha inválidos");
             return;
         }
 
@@ -54,7 +54,9 @@ export const Login = ({ navigation }) => {
             });
 
             await AsyncStorage.setItem('token', JSON.stringify(response.data));
+
             navigation.navigate("Main");
+            
         } catch (error) {
             console.error("Erro na chamada da API:", error);
             Alert.alert("Erro", "Falha ao fazer login. Por favor, tente novamente.");

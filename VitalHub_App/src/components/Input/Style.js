@@ -42,6 +42,7 @@ export const BoxInputMed = styled(BoxInput)`
     gap: 10px;
     height: auto;
     margin: 10px 0px;
+    width: 100%;
 `
 export const DirectionRow = styled(BoxInput)`
     flex-direction: row;

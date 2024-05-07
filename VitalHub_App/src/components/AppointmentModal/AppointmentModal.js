@@ -9,34 +9,22 @@ import { ButtonRowAppointment } from "../AppButton/Style";
 import { AppButton } from "../AppButton/AppButton";
 import AppResumeModal from "../AppResumeModal/AppResumeModal";
 import { InputInsert } from "../Input/Style";
-import { Text } from "react-native";
+
+const nivelConsulta = [
+    { id: 'DE4D56BE-F647-4127-8962-3BA1C2D6577C', tipo: "Rotina" },
+    { id: 'B070C6E9-E612-4774-8F30-C265DD15E1F3', tipo: "Exame" },
+    { id: '4DDDDD07-4EBF-4ABA-AA1B-0A44E927584D', tipo: "Urgência" },
+]
 
 const AppointmentModal = ({
     navigation, visible, setShowModalApp, ...rest
 }) => {
-    const [statusLista, setStatusLista] = useState("exame");
     const [showAppResume, setShowAppResume] = useState(false);
-    const [localizacao, setLocalizacao] = useState('');
-    const [localizacaoError, setLocalizacaoError] = useState('');
-
-    async function handleClose(screen) {
-        await setShowModalApp(false)
-        navigation.replace(screen)
-    }
-
-    const validateLocalizacao = () => {
-        if (!localizacao) {
-            setLocalizacaoError('Localização é obrigatória');
-            return false;
-        }
-        setLocalizacaoError('');
-        return true;
-    };
+    const [agendamento, setAgendamento] = useState(null)
 
     const handleSubmit = () => {
-        if (validateLocalizacao()) {
-            handleClose("SelectClinic");
-        }
+        setShowModalApp(false);
+        navigation.replace("SelectClinic", { agendamento: agendamento })
     };
 
     return (
@@ -48,33 +36,40 @@ const AppointmentModal = ({
                     <SelectBox>
                         <TitleInput> Qual é o nível da consulta? </TitleInput>
                         <ButtonRowAppointment>
-                            <AppButton
-                                textButton={"Exame"}
-                                clickButton={statusLista === "exame"}
-                                onPress={() => setStatusLista("exame")}
-                            />
-                            <AppButton
-                                textButton={"Rotina"}
-                                clickButton={statusLista === "rotina"}
-                                onPress={() => setStatusLista("rotina")}
-                            />
-                            <AppButton
-                                textButton={"Urgência"}
-                                clickButton={statusLista === "urgencia"}
-                                onPress={() => setStatusLista("urgencia")}
-                            />
+                            {nivelConsulta.map((item, index) => {
+                                return (
+                                    <AppButton
+                                        key={item.id}
+
+                                        onPress={() => setAgendamento({
+                                            ...agendamento,
+                                            prioridadeId: item.id,
+                                            prioridadeLabel: item.tipo
+                                        })}
+
+                                        clickButton={
+                                            agendamento
+                                                ? agendamento.prioridadeId == item.id
+                                                : false
+                                        }
+
+                                        textButton={item.tipo}
+                                    />
+                                )
+                            })}
                         </ButtonRowAppointment>
                     </SelectBox>
 
                     <SelectBox>
-                        <TitleInput> Informe a localização </TitleInput>
+                        <TitleInput> Qual é a localização desejada? </TitleInput>
                         <InputInsert
-                            placeholder="Digite a localização"
-                            value={localizacao}
-                            onChangeText={(txt) => setLocalizacao(txt)}
-                            style={localizacaoError ? { borderColor: 'red' } : {}}
+                            placeholder="Informe a localização"
+                            value={agendamento ? agendamento.localizacao : null}
+                            onChangeText={(txt) => setAgendamento({
+                                ...agendamento,
+                                localizacao: txt
+                            })}
                         />
-                        {localizacaoError && <Text style={{ color: 'red' }}>{localizacaoError}</Text>}
                     </SelectBox>
 
                     <AppResumeModal
@@ -84,7 +79,7 @@ const AppointmentModal = ({
                     />
 
                     <BtnModal onPress={handleSubmit}>
-                        <ButtonTxt> Confirmar </ButtonTxt>
+                        <ButtonTxt> Continuar </ButtonTxt>
                     </BtnModal>
 
                     <LinkCancel onPress={() => setShowModalApp(false)}>

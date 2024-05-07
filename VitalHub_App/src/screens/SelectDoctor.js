@@ -18,20 +18,32 @@ export const SelectDoctor = ({ navigation, route }) => {
     //State para confirmar o id vindo da api para select do card Medico
     const [idConfirm, setIdConfirm] = useState()
 
-    async function ListarMedicos() {
-        try {
-            const resApi = await api.get(`Medicos/BuscarPorIdClinica?id=${route.params.route}`)
-            setMedicoLista(resApi.data)
+    const [medico, setMedico] = useState()
 
-        } catch (error) {
-            console.log(error);
-        }
-     
+    async function ListarMedicos() {
+        await api
+            .get(`/Medicos/BuscarPorIdClinica?id=${route.params.agendamento.clinicaId}`)
+            .then((response) => { setMedicoLista(response.data), console.log(response.data); })
+            .catch((error) => { console.log(error); })
+    }
+
+    function handleContinue() {
+        navigation.replace("SelectDate", {
+            agendamento:
+            {
+                ...route.params.agendamento,
+                ...medico
+            }
+        });
     }
 
     useEffect(() => {
         ListarMedicos()
     }, [])
+
+    useEffect(() => {
+        console.log(route);
+    }, [route])
 
     return (
         <Container>
@@ -40,25 +52,25 @@ export const SelectDoctor = ({ navigation, route }) => {
             <ListComponent
                 data={medicoLista}
                 key={(item) => item.id}
-                renderItem={(item) => (
+                renderItem={({ item }) => (
 
                     <DoctorCardSelect
-                        name={item.item.idNavigation.nome}
-                        especialidade={item.item.especialidade.especialidade1}
+                        name={item.idNavigation.nome}
+                        especialidade={item.especialidade.especialidade1}
                         clickButton={selectDoctor}
-                        onPress={() => {setSelectDoctor(true); setIdConfirm(item.item.id)}}
+                        onPress={() => { setMedico({ medicoClinicaId: item.id, medicoLabel: item.idNavigation.nome }), setSelectDoctor(true); setIdConfirm(item.id) }}
                         index={idConfirm}
-                        doctorId={item.item.id}
+                        doctorId={item.id}
                     />
                 )}
 
             />
 
-            <Button onPress={() => navigation.navigate("SelectDate")}>
-                <ButtonTxt> CONTINUAR </ButtonTxt>
+            <Button onPress={() => handleContinue()}>
+                <ButtonTxt> Continuar </ButtonTxt>
             </Button>
 
-            <LinkCancel onPress={() => navigation.navigate("SelectClinic")}>Cancelar</LinkCancel>
+            <LinkCancel onPress={() => navigation.replace("Main")}>Cancelar</LinkCancel>
 
         </Container>
     );

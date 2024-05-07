@@ -3,6 +3,7 @@ import { Container } from "../components/Container/Style";
 import { ImgLocal } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { LinkCancel } from "../components/Links/Style";
+import { Map } from "../components/Map/Map";
 import { Subtitle, Title, TitleInput, TitleLocation } from "../components/Title/Style";
 import { ActivityIndicator } from "react-native";
 import api from "../Service/Service";

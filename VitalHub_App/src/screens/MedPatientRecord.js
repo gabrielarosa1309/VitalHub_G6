@@ -1,7 +1,6 @@
 import { Container } from "../components/Container/Style";
 import { Button, ButtonTxt } from "../components/EntryButton/Style";
-import { ImgProfile } from "../components/ImgProfile/Style";
-import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
+import { BoxInput, InputBlock } from "../components/Input/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { ContentTxt } from "../components/MedRecordModal/Style";
 import { ProfileData } from "../components/PatientAppCard/Style";

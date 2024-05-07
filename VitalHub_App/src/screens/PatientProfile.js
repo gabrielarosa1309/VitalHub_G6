@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Container, ContainerImage, ContainerScroll } from "../components/Container/Style";
-import { Button, ButtonCamera, ButtonTxt, ExitButton } from "../components/EntryButton/Style";
+import { Button, ButtonCamera, ButtonTxt } from "../components/EntryButton/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { BoxInput, BoxInputRow, DirectionRow, InputBlock, InputBodyRow } from "../components/Input/Style";
 import { Subtitle, Title, TitleInput } from "../components/Title/Style";
@@ -8,6 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userDecodeToken } from "../utils/auth/auth";
 import CameraModal from "../components/CameraModal/CameraModal";
+import api from "../Service/Service";
 
 export const PatientProfile = ({ navigation }) => {
     const [openModal, setOpenModal] = useState(false)

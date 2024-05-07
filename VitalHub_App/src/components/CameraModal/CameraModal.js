@@ -28,10 +28,7 @@ const CameraModal = ({
         if (cameraRef) {
             const photo = await cameraRef.current.takePictureAsync({quality : 1});
             setPhoto(photo.uri)
-
             setOpenModal(true)
-           
-            
         }
     }
 
@@ -40,18 +37,16 @@ const CameraModal = ({
         fecharModal(false)
     }
 
-    async function SelectImageGallery()
-    {
+    async function SelectImageGallery() {
         const result = await ImagePicker.launchImageLibraryAsync({
 
-            mediaTypes : ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 1,
         });
-if ( !result.canceled ) {
-    setPhoto( result.assets[0].uri)
 
-}
-
+        if (!result.canceled) {
+            setPhoto(result.assets[0].uri)
+        }
     }
 
     async function SavePhoto() {
@@ -86,8 +81,8 @@ if (assets.length > 0) {
 
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
-GetLastPhoto()
-        
+
+        GetLastPhoto()
     }, [])
 
 
@@ -112,36 +107,36 @@ GetLastPhoto()
                 </Camera>
 
                 <View style={styles.alignButtons}>
-                <TouchableOpacity 
-                onPress={() => SelectImageGallery()}
-                >
+                    <TouchableOpacity
+                        onPress={() => SelectImageGallery()}
+                    >
 
-                                {latestFoto != null ? 
-                            
+                        {latestFoto != null ?
+
                             (
-                            <LastPhoto
-                            source={{uri : latestFoto}}
-                            />
-                            
+                                <LastPhoto
+                                    source={{ uri: latestFoto }}
+                                />
+
                             )
 
                             :
 
                             null
-                            }
+                        }
 
-                            </TouchableOpacity>
-
-
-                <TouchableOpacity style={styles.btnCapture} onPress={() => {CapturePhoto()}}>
-                    <FontAwesome
-                        name='camera'
-                        size={23}
-                        color={"#fff"}
-                    />
+                    </TouchableOpacity>
 
 
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnCapture} onPress={() => { CapturePhoto() }}>
+                        <FontAwesome
+                            name='camera'
+                            size={23}
+                            color={"#fff"}
+                        />
+
+
+                    </TouchableOpacity>
 
                 </View>
                 <Modal animationType='slide' transparent={false} visible={openModal}>
@@ -149,7 +144,7 @@ GetLastPhoto()
                         <Image style={{ width: '100%', height: 500, borderRadius: 10 }} source={{ uri: photo }} />
                         <View style={{ margin: 15, flexDirection: 'row' }}>
 
-                            
+
 
                             <TouchableOpacity style={styles.btnCancel} onPress={() => ClearPhoto()}>
                                 <FontAwesome
@@ -166,7 +161,7 @@ GetLastPhoto()
                                 />
                             </TouchableOpacity>
 
-                            
+
                         </View>
                     </View>
                 </Modal>
@@ -177,10 +172,12 @@ GetLastPhoto()
 }
 
 const styles = StyleSheet.create({
-    alignButtons: {flexDirection : 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 30},
+    alignButtons: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 30
+    },
     container: {
         flex: 1,
         backgroundColor: '#fff',

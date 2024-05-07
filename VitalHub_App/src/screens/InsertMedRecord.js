@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, ScrollViewBase, View } from "react-native";
 import { ProfileData } from "../components/AppointmentCard/Style";
-import { Container, ContainerImage } from "../components/Container/Style";
+import { Container, ContainerImage, Scroll } from "../components/Container/Style";
 import { ImgProfile } from "../components/ImgProfile/Style";
 import { ContentTxt } from "../components/MedRecordModal/Style";
 import { Title, TitleInput } from "../components/Title/Style";
 import { BigInputInsert, BoxInput, BoxInputMed, InputInsert } from "../components/Input/Style";
-import { Button, ButtonCamera, ButtonTxt, } from "../components/EntryButton/Style";
+import { ButtonCamera, ButtonTxt, } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Text } from "react-native";
 import CameraModal from '../components/CameraModal/CameraModal';
@@ -48,26 +47,23 @@ export const InsertMedRecord = ({navigation, route}) => {
     }
 
     async function AlterarFotoPerfil() {
-        
         const formData = new FormData();
-      formData.append("Arquivo", 
-        {
-            uri: uriCameraCapture,
-            name: `image.${uriCameraCapture.split(".")[1]}`,
-            type: `image/${uriCameraCapture.split(".")[1]}`
-        })
+        formData.append("Arquivo",
+            {
+                uri: uriCameraCapture,
+                name: `image.${uriCameraCapture.split(".")[1]}`,
+                type: `image/${uriCameraCapture.split(".")[1]}`
+            })
 
-       console.log("form data"); 
-console.log(formData);
+        console.log("form data");
+        console.log(formData);
 
-        await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
-        .then((response) => {console.log(response.status); setUserData({ ...userData, foto : uriCameraCapture})})
-        .catch((error) => console.log(error)) 
-
+        await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: { "Content-Type": "multipart/form-data" } })
+            .then((response) => { console.log(response.status); setUserData({ ...userData, foto: uriCameraCapture }) })
+            .catch((error) => console.log(error))
     }
 
     useEffect(() => {
-        
         profileLoad();
         console.log(route.params.idConsulta);
         
@@ -81,12 +77,11 @@ console.log(formData);
     }, [])
 
     useEffect(() => {
-        if(uriCameraCapture){
+        if (uriCameraCapture) {
             AlterarFotoPerfil()
         }
-       
-        
     }, [uriCameraCapture])
+
     const validateCampos = () => {
         let isValid = true;
 
@@ -123,14 +118,13 @@ console.log(formData);
 
     return (
         <Container>
-           
-               {open ? (<CameraModal
-            setUriCameraCapture={setsetUriCameraCapture}
-            getMediaLibrary={true}
-            fecharModal={setOpen}
+            {open ? (<CameraModal
+                setUriCameraCapture={setsetUriCameraCapture}
+                getMediaLibrary={true}
+                fecharModal={setOpen}
             // attPhotoProfile={ () => AlterarFotoPerfil() }
             />) : (<></>)} 
-            <ScrollView>
+            <Scroll>
             <ContainerImage>
             <ImgProfile source={{uri : uriCameraCapture}} />
 
@@ -146,7 +140,15 @@ console.log(formData);
 
             </ButtonCamera>
 
+                <ButtonCamera onPress={() => { setOpen(true) }}>
+                    <MaterialCommunityIcons
+                        name="camera-plus"
+                        size={20}
+                        color={'#fbfbfb'}
+                    />
+                </ButtonCamera>
             </ContainerImage>
+
             <Title> Chewie </Title>
 
             <ProfileData>
@@ -190,16 +192,9 @@ console.log(formData);
                 {prescricaoError && <Text style={{ color: 'red' }}>{prescricaoError}</Text>}
             </BoxInputMed>
 
-            {/* <Button onPress={() => InserirExame()}>
-            <ButtonTxt> SALVAR </ButtonTxt>
-            </Button>
-
-            <LinkCancel>
-                Cancelar
-            </LinkCancel> */}
-            </ScrollView>
+         
+            </Scroll>
         </Container>
-        
     );
 }
 
