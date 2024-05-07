@@ -14,7 +14,7 @@ import { Text, Alert } from "react-native";
 export const Login = ({ navigation }) => {
     const [email, setEmail] = useState('chewie@email.com')
     const [senha, setSenha] = useState('gabi123')
-    const [errorMessage, setErrorMessage] = useState(''); 
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Função para validar o e-mail
     const validateEmail = (email) => {
@@ -43,7 +43,7 @@ export const Login = ({ navigation }) => {
         const senhaError = validateSenha(senha);
 
         if (emailError || senhaError) {
-            setErrorMessage("Email ou senha inválidos"); 
+            setErrorMessage("Email ou senha inválidos");
             return;
         }
 
@@ -52,9 +52,11 @@ export const Login = ({ navigation }) => {
                 email: email,
                 senha: senha
             });
-console.log(response.status)
+
             await AsyncStorage.setItem('token', JSON.stringify(response.data));
+
             navigation.navigate("Main");
+            
         } catch (error) {
             console.error("Erro na chamada da API:", error);
             Alert.alert("Erro", "Falha ao fazer login. Por favor, tente novamente.");

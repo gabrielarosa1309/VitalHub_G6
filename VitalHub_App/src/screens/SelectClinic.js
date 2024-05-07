@@ -64,6 +64,7 @@ export const SelectClinic = ({ navigation, route }) => {
                         onPress={() => { setClinica({ clinicaId: item.id, clinicaLabel: item.nomeFantasia }); setSelectClinic(true); setIdConfirm(item.id) }}
                         index={idConfirm}
                         clinicId={item.id}
+                        route={item.id}
                     />
                 )} />
 

@@ -12,46 +12,85 @@ import { ImgProfile } from "../components/ImgProfile/Style";
 import { useEffect, useState } from "react";
 import CameraModal from "../components/CameraModal/CameraModal";
 import api from "../Service/Service";
+import { userDecodeToken } from "../utils/Auth";
 
-export const PatientVisuRecord = ({ navigation }) => {
+export const PatientVisuRecord = ({ navigation, route }) => {
 
-    
+
     const [openModal, setOpenModal] = useState(false)
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
     const [foto, setFoto] = useState();
+    const [descricao, setDescricao] = useState();
+    const [userData, setUserData] = useState({});
 
-async function OcrPost() {
-    
-    const formData = new FormData();
-       
-      formData.append("Arquivo", 
-        {
-            uri: uriCameraCapture,
-            name: `image.${uriCameraCapture.split(".")[1]}`,
-            type: `image/${uriCameraCapture.split(".")[1]}`
-        })
-console.log(uriCameraCapture);
-        
-await api.post(`/Ocr`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
-.then((response) => {console.log(response.status); setFoto({foto: uriCameraCapture})})
-.catch((error) => console.log(error)) 
+    // async function OcrPost() {
 
-}
+    //     const formData = new FormData();
 
-useEffect(() => {
-        
-    if (uriCameraCapture != null) {
-        OcrPost()
+    //       formData.append("Image", 
+    //         {
+    //             uri: uriCameraCapture,
+    //             name: `image.${uriCameraCapture.split(".")[1]}`,
+    //             type: `image/${uriCameraCapture.split(".")[1]}`
+    //         })
+    // console.log(uriCameraCapture);
+
+    // await api.post(`/Ocr`, formData, { headers: {"Content-Type" : "multipart/form-data"}})
+    // .then((response) => {console.log(response.status); setFoto({foto: uriCameraCapture})})
+    // .catch((error) => console.log(error)) 
+
+    // }
+    async function profileLoad() {
+        const data = await userDecodeToken();
+        setUserData(data)
     }
-   console.log(uriCameraCapture);
-    
-}, [uriCameraCapture])
+
+    async function InserirExame() {
+        console.log(route.params.idConsulta);
+
+        const formData = new FormData();
+
+        formData.append("ConsultaId", route.params.idConsulta)
+
+        formData.append("Imagem",
+            {
+                uri: uriCameraCapture,
+                name: `image.${uriCameraCapture.split(".").pop()}`,
+                type: `image/${uriCameraCapture.split(".").pop()}`
+            })
+        console.log(uriCameraCapture);
+
+        console.log("form data");
+        console.log(formData);
+
+        await api.post(`/Exame/Cadastrar`, formData, { headers: { "Content-Type": "multipart/form-data" } })
+            .then((response) => { console.log(response.status), setDescricao(descricao + "\n" + response.data.descricao); setUserData({ ...userData, foto: uriCameraCapture }) })
+            .catch((error) => console.log(error))
+
+    }
+
+    useEffect(() => {
+
+        if (uriCameraCapture != null) {
+            InserirExame()
+        }
+
+
+    }, [uriCameraCapture])
+
+    useEffect(() => {
+
+        profileLoad();
+
+
+    }, [])
+
 
     return (
         <ContainerScroll>
             <ContainerUser>
 
-                <ImgProfile source={require("../assets/img/medico4.jpg")} />
+                <ImgProfile source={{ uri: uriCameraCapture }} />
 
                 <Title> Dr. Claudio </Title>
 
@@ -82,27 +121,27 @@ useEffect(() => {
 
                     <BoxInput>
                         <TitleInput> Exames médicos </TitleInput>
-                       
+
                         {uriCameraCapture == null ?
-                        (<>
-                       <InputBlockImg>
-                        <MaterialCommunityIcons
-                                name="file-alert-outline"
-                                size={18}
-                                color="#33303E"
-                            />
-                            <InpBlockImgTxt>Nenhuma foto informada</InpBlockImgTxt>
-                            </InputBlockImg>
-                            </>) 
-                            : 
-                            (<InputBlockImg><InpBlockImgTxt>Foto Selecionada!</InpBlockImgTxt></InputBlockImg>)}
-                            
-                        
+                            (<>
+                                <InputBlockImg>
+                                    <MaterialCommunityIcons
+                                        name="file-alert-outline"
+                                        size={18}
+                                        color="#33303E"
+                                    />
+                                    <InpBlockImgTxt>Nenhuma foto informada</InpBlockImgTxt>
+                                </InputBlockImg>
+                            </>)
+                            :
+                            (<InputBlockImg><InpBlockImgTxt>{descricao}</InpBlockImgTxt></InputBlockImg>)}
+
+
                     </BoxInput>
 
                     <RowButtonVisu>
                         <View style={{ width: "50%" }}>
-                            <ButtonVisu onPress={() => {setOpenModal(true)}}>
+                            <ButtonVisu onPress={() => { setOpenModal(true) }}>
                                 <MaterialIcons
                                     name="add-photo-alternate"
                                     size={20}
@@ -110,7 +149,7 @@ useEffect(() => {
                                 />
                                 <ButtonVisuTxt>Enviar</ButtonVisuTxt>
                             </ButtonVisu>
-                            
+
                         </View>
 
                         <View style={{ width: "50%", alignContent: "center", justifyContent: "center" }}>
@@ -131,15 +170,15 @@ useEffect(() => {
 
             {/* Alteração que fez funcionar o modal */}
             {openModal ? (<CameraModal
-            setUriCameraCapture={setsetUriCameraCapture}
-            getMediaLibrary={true}
-            fecharModal={setOpenModal}
-        
+                setUriCameraCapture={setsetUriCameraCapture}
+                getMediaLibrary={true}
+                fecharModal={setOpenModal}
+
             />
-            
-            ) 
-            : 
-            (<></>)}
+
+            )
+                :
+                (<></>)}
         </ContainerScroll>
     );
 }

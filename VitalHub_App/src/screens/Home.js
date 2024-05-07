@@ -44,7 +44,6 @@ export const Home = ({ navigation }) => {
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-
             }).catch(error => {
                 console.log(error);
             })
@@ -125,22 +124,24 @@ export const Home = ({ navigation }) => {
                             navigation={navigation}
 
                             roleUsuario={profile.role}
-                            dataConsulta={item.dataConsulta} 
+                            dataConsulta={item.dataConsulta}
                             prioridade={item.prioridade.prioridade}
-                            usuarioConsulta={ profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
+                            usuarioConsulta={profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
                             time={item.dataConsulta}
-                            
+
                             onPressMedModal={() => MostrarModal('prontuario', item)}
-                            onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
+                            onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id) }}
+                            onPressPront={() => { profile.role == "Medico" ? navigation.replace("InsertMedRecord", { idConsulta: item.id }) : navigation.replace("PatientVisuRecord") }}
                         />
                     )
                 }
             />
 
-            {profile.role === "Paciente" ? (<AppointmentButton onPress={() => setShowModalApp(true)} />) : (<></>)}
+            {profile === "Medico" ? (<></>) : (<AppointmentButton onPress={() => setShowModalApp(true)} />)}
 
             <CancelModal
                 onPressConfirm={() => CancelConsult()}
+
                 visible={showModalCancel}
                 setShowModalCancel={setShowModalCancel}
             />
@@ -158,7 +159,9 @@ export const Home = ({ navigation }) => {
                 visible={showModalApp}
                 setShowModalApp={setShowModalApp}
                 navigation={navigation}
+
             />
+
         </Container>
     );
 }

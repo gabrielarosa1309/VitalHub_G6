@@ -22,11 +22,11 @@ const CameraModal = ({
     const [photo, setPhoto] = useState(null) //capturar foto ou selecionada da galeria
     const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
     const [openModal, setOpenModal] = useState(false)
-    const [latestPhoto, setLatestPhoto] = useState(null)
+    const [latestFoto, setLatestFoto] = useState(null)
 
     async function CapturePhoto() {
         if (cameraRef) {
-            const photo = await cameraRef.current.takePictureAsync();
+            const photo = await cameraRef.current.takePictureAsync({quality : 1});
             setPhoto(photo.uri)
             setOpenModal(true)
         }
@@ -65,13 +65,14 @@ const CameraModal = ({
     }
 
     async function GetLastPhoto() {
-        const assets = await MediaLibrary.getAssetsAsync({ sortBy: [[MediaLibrary.SortBy.creationTime, false]], first: 1 });
+        
+        const {assets} = await MediaLibrary.getAssetsAsync({SortBy : [[MediaLibrary.SortBy.creationTime, false]], first : 1})
 
-        console.log(assets);
 
-        if (assets.length > 0) {
-            setLatestPhoto(assets[0].uri)
-        }
+if (assets.length > 0) {
+    
+    setLatestFoto(assets[0].uri)
+}
     }
 
     useEffect(() => {

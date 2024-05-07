@@ -25,7 +25,8 @@ export const PatientAppCard = ({
   roleUsuario,
   prioridade,
   time,
-  usuarioConsulta
+  usuarioConsulta,
+  onPressPront
 }) => {
   const [showMedModal, setShowMedModal] = useState(false);
 
@@ -82,7 +83,7 @@ export const PatientAppCard = ({
                 <ButtonText situacao={situacao}>Cancelar</ButtonText>
               </ButtonCard>
             ) : (
-              <ButtonCard onPress={() => navigation.navigate("PatientVisuRecord")}>
+              <ButtonCard onPress={onPressPront}>
                 <ButtonText situacao={situacao}>Ver Prontuário</ButtonText>
               </ButtonCard>
             )

@@ -34,7 +34,6 @@ const AppResumeModal = ({
 
         if (token) {
             setProfile(token.user)
-            console.log(profile);
         }
     };
 
