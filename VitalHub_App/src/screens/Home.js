@@ -66,9 +66,6 @@ export const Home = ({ navigation }) => {
 
     profileLoad(); 
         
-   
-            
-    console.log(profile);
        
     
         
@@ -140,7 +137,7 @@ export const Home = ({ navigation }) => {
 
                             onPressMedModal={() => MostrarModal('prontuario', item)}
                             onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
-                            onPressPront={() => {profile.role == "Medico" ? navigation.replace("PatientVisuRecord", {idConsulta : item.id}) : navigation.replace("InsertMedRecord", {idConsulta : item.id}) }}
+                            onPressPront={() => {profile.role == "Medico" ? navigation.replace("InsertMedRecord", {idConsulta : item.id}) : navigation.replace("c", {idConsulta : item.id}) }}
                         />
                     )
                 }

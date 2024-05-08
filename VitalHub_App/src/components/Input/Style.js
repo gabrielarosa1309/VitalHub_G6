@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import css from "styled-components";
+
 
 export const Input = styled.TextInput.attrs({placeholderTextColor: '#34898f'})`
     width: 90%;
@@ -6,6 +8,7 @@ export const Input = styled.TextInput.attrs({placeholderTextColor: '#34898f'})`
     padding: 16px;
     margin-top: 15px;
     border: 2px solid #49b3ba;
+    
     border-radius: 5px;
     color: #34898f;
     font-size: 16px;
@@ -26,11 +29,15 @@ export const InputBoxVerify = styled.View`
 export const InputInsert = styled(Input)`
     width: 100%;
     margin: 0px;
+    border: 2px solid #F5F3F3;
+    background-color: #D9D9D9;
 `
 export const BigInputInsert = styled(Input)`
     width: 100%;
     height: 120px;
     margin: 0px;
+    background-color: #D9D9D9;
+    border: 2px solid #F5F3F3;
 `
 export const BoxInput = styled.View`
     width: 90%;
@@ -43,6 +50,7 @@ export const BoxInputMed = styled(BoxInput)`
     height: auto;
     margin: 10px 0px;
     width: 100%;
+  
 `
 export const DirectionRow = styled(BoxInput)`
     flex-direction: row;

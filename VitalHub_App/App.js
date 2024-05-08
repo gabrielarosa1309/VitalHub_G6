@@ -55,7 +55,7 @@ export default function App() {
           options={{ title: 'Login' }} //titulo da tela
         />
 
-        <Stack.Screen
+       <Stack.Screen
           name="Main"
           component={Main}
         />

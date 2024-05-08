@@ -5,7 +5,7 @@ import { ImgProfile } from "../components/ImgProfile/Style";
 import { ContentTxt } from "../components/MedRecordModal/Style";
 import { Title, TitleInput } from "../components/Title/Style";
 import { BigInputInsert, BoxInput, BoxInputMed, InputInsert } from "../components/Input/Style";
-import { ButtonCamera, ButtonTxt, } from "../components/EntryButton/Style";
+import { Button, ButtonCamera, ButtonTxt, } from "../components/EntryButton/Style";
 import { LinkCancel } from "../components/Links/Style";
 import { Text } from "react-native";
 import CameraModal from '../components/CameraModal/CameraModal';
@@ -15,7 +15,7 @@ import api from '../Service/Service';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const InsertMedRecord = ({navigation, route}) => {
+export const InsertMedRecord = ({navigation, route, editProp}) => {
     const [descricao, setDescricao] = useState('');
     const [diagnostico, setDiagnostico] = useState('');
     const [prescricao, setPrescricao] = useState('');
@@ -26,6 +26,7 @@ export const InsertMedRecord = ({navigation, route}) => {
     const [open, setOpen] = useState(false);
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
     const [infoConsulta, setInfoConsulta] = useState([])
+    const [editPatient, setEditPatient] = useState(false)
     async function profileLoad() {
         const data = await userDecodeToken();
         setUserData(data)
@@ -41,8 +42,12 @@ export const InsertMedRecord = ({navigation, route}) => {
                 "Authorization": `Bearer ${token}`
             }
           }) 
-        console.log(infoConsulta.data);
+        
         setInfoConsulta(infoConsulta.data)
+
+        setDescricao(infoConsulta.data.descricao)
+        setDiagnostico(infoConsulta.data.diagnostico)
+   
         
     }
 
@@ -109,12 +114,17 @@ export const InsertMedRecord = ({navigation, route}) => {
         return isValid;
     };
 
-    const handleSubmit = () => {
-        if (validateCampos()) {
-            // Aqui você pode adicionar a lógica para salvar o registro médico
-            console.log("Registro médico salvo com sucesso.");
-        }
+    async function handleSubmit() {
+       const res = await api.put(`Consultas/Prontuario`, {
+
+        consultaId: route.params.idConsulta,
+        medicamento: prescricao,
+       descricao: descricao,
+       diagnostico: diagnostico})
+
+       console.log(res.status);
     };
+
 
     return (
         <Container>
@@ -152,10 +162,11 @@ export const InsertMedRecord = ({navigation, route}) => {
                 <TitleInput> Descrição da consulta </TitleInput>
                 <BigInputInsert
                     placeholder="Descrição"
-                    value={infoConsulta.descricao}
+                    value={descricao}
                     onChangeText={(txt) => setDescricao(txt)}
-                    style={descricaoError ? { borderColor: 'red' } : {}}
-                    editable={false}
+                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    editable={editPatient == true ? true : false}
+                    
                 />
                 {descricaoError && <Text style={{ color: 'red' }}>{descricaoError}</Text>}
             </BoxInputMed>
@@ -164,10 +175,10 @@ export const InsertMedRecord = ({navigation, route}) => {
                 <TitleInput> Diagnóstico do paciente </TitleInput>
                 <InputInsert
                     placeholder="Diagnóstico"
-                    value={infoConsulta.diagnostico}
+                    value={diagnostico}
                     onChangeText={(txt) => setDiagnostico(txt)}
-                    style={diagnosticoError ? { borderColor: 'red' } : {}}
-                    editable={false}
+                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    editable={editPatient == true ? true : false}
                 />
                 {diagnosticoError && <Text style={{ color: 'red' }}>{diagnosticoError}</Text>}
             </BoxInputMed>
@@ -178,12 +189,21 @@ export const InsertMedRecord = ({navigation, route}) => {
                     placeholder="Prescrição medica"
                     value={prescricao}
                     onChangeText={(txt) => setPrescricao(txt)}
-                    style={prescricaoError ? { borderColor: 'red' } : {}}
-                    editable={false}
+                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    editable={editPatient == true ? true : false}
                 />
                 {prescricaoError && <Text style={{ color: 'red' }}>{prescricaoError}</Text>}
             </BoxInputMed>
+{userData.role == "Medico" ? (<>   
 
+                <Button onPress={() =>{ setEditPatient(false), handleSubmit()}}>
+                    <ButtonTxt> Salvar </ButtonTxt>
+                </Button>
+                <Button onPress={() => setEditPatient(true) }>
+                    <ButtonTxt> EDITAR </ButtonTxt>
+                </Button>
+                
+                </>) : null}
          
             </Scroll>
         </Container>
