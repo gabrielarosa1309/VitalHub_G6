@@ -44,10 +44,9 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
           }) 
         
         setInfoConsulta(infoConsulta.data)
-
         setDescricao(infoConsulta.data.descricao)
         setDiagnostico(infoConsulta.data.diagnostico)
-   
+        setPrescricao(infoConsulta.data.receita.medicamento)
         
     }
 
@@ -60,17 +59,16 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
                 type: `image/${uriCameraCapture.split(".")[1]}`
             })
 
-        console.log("form data");
-        console.log(formData);
+        
 
         await api.put(`/Usuario/AlterarFotoPerfil?id=${userData.user}`, formData, { headers: { "Content-Type": "multipart/form-data" } })
-            .then((response) => { console.log(response.status); setUserData({ ...userData, foto: uriCameraCapture }) })
+            .then((response) => {setUserData({ ...userData, foto: uriCameraCapture }) })
             .catch((error) => console.log(error))
     }
 
     useEffect(() => {
         profileLoad();
-        console.log(route.params.idConsulta);
+        
         
     }, [])
 
@@ -122,7 +120,7 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
        descricao: descricao,
        diagnostico: diagnostico})
 
-       console.log(res.status);
+       
     };
 
 
@@ -162,9 +160,10 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
                 <TitleInput> Descrição da consulta </TitleInput>
                 <BigInputInsert
                     placeholder="Descrição"
+                    placeholderTextColor={editPatient ?  '#34898F' : '#33303E'}
                     value={descricao}
                     onChangeText={(txt) => setDescricao(txt)}
-                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    style={editPatient ? {color: '#34898F', borderStyle: 'solid' , borderWidth: 2, borderColor: '#49B3BA' , backgroundColor: "white", } : {color: '#33303E', backgroundColor: "#F5F3F3", borderStyle: 'solid' , borderWidth: 2, borderColor: '#D9D9D9'}}
                     editable={editPatient == true ? true : false}
                     
                 />
@@ -175,9 +174,10 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
                 <TitleInput> Diagnóstico do paciente </TitleInput>
                 <InputInsert
                     placeholder="Diagnóstico"
+                    placeholderTextColor={editPatient ?  '#34898F' : '#33303E'}
                     value={diagnostico}
                     onChangeText={(txt) => setDiagnostico(txt)}
-                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    style={editPatient ? {color: '#34898F', borderStyle: 'solid' , borderWidth: 2, borderColor: '#49B3BA' , backgroundColor: "white", } : {color: '#33303E', backgroundColor: "#F5F3F3", borderStyle: 'solid' , borderWidth: 2, borderColor: '#F5F3F3'}}
                     editable={editPatient == true ? true : false}
                 />
                 {diagnosticoError && <Text style={{ color: 'red' }}>{diagnosticoError}</Text>}
@@ -187,19 +187,25 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
                 <TitleInput> Prescrição medica </TitleInput>
                 <BigInputInsert
                     placeholder="Prescrição medica"
+                    placeholderTextColor={editPatient ?  '#34898F' : '#33303E'}
                     value={prescricao}
                     onChangeText={(txt) => setPrescricao(txt)}
-                    style={editPatient ? {backgroundColor: "#D9D9D9", border: '2px solid red'} : {backgroundColor: "#49B3BA", border: '2px solid red'}}
+                    style={editPatient ? {color: '#34898F', borderStyle: 'solid' , borderWidth: 2, borderColor: '#49B3BA' , backgroundColor: "white", } : {color: '#33303E', backgroundColor: "#F5F3F3", borderStyle: 'solid' , borderWidth: 2, borderColor: '#F5F3F3'}}
                     editable={editPatient == true ? true : false}
                 />
                 {prescricaoError && <Text style={{ color: 'red' }}>{prescricaoError}</Text>}
             </BoxInputMed>
 {userData.role == "Medico" ? (<>   
 
-                <Button onPress={() =>{ setEditPatient(false), handleSubmit()}}>
+                <Button 
+                    disabled={editPatient ? false : true}
+                    onPress={() =>{ setEditPatient(false), handleSubmit()}}>
                     <ButtonTxt> Salvar </ButtonTxt>
                 </Button>
-                <Button onPress={() => setEditPatient(true) }>
+                <Button 
+                disabled={editPatient ? true : false}
+                style={editPatient ? {backgroundColor: '#ACABB7'} : {backgroundColor:  '#496BBA'} }
+                onPress={() => setEditPatient(true) }>
                     <ButtonTxt> EDITAR </ButtonTxt>
                 </Button>
                 

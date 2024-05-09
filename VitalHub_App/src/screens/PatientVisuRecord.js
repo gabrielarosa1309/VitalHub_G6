@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import CameraModal from "../components/CameraModal/CameraModal";
 import api from "../Service/Service";
 import { userDecodeToken } from "../utils/Auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const PatientVisuRecord = ({ navigation, route }) => {
 
@@ -20,8 +21,25 @@ export const PatientVisuRecord = ({ navigation, route }) => {
     const [openModal, setOpenModal] = useState(false)
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
     const [foto, setFoto] = useState();
-    const [descricao, setDescricao] = useState();
+    const [infoConsulta, setInfoConsulta] = useState([])
     const [userData, setUserData] = useState({});
+    const [medicamento, setMedicamento] = useState('');
+ 
+    async function GetInfoConsulta() {
+
+        const token = JSON.parse( await AsyncStorage.getItem("token") ).token //o .token Serve para desencapsular o token do json 
+      
+        const infoConsulta = await api.get(`/Consultas/BuscarPorId?id=${route.params.idConsulta}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+          }) 
+        setInfoConsulta(infoConsulta.data)
+        console.log(infoConsulta);
+          setMedicamento(infoConsulta.data.receita.medicamento)
+        
+    }
+
 
     // async function OcrPost() {
 
@@ -46,8 +64,7 @@ export const PatientVisuRecord = ({ navigation, route }) => {
     }
 
     async function InserirExame() {
-        console.log(route.params.idConsulta);
-
+       
         const formData = new FormData();
 
         formData.append("ConsultaId", route.params.idConsulta)
@@ -58,16 +75,22 @@ export const PatientVisuRecord = ({ navigation, route }) => {
                 name: `image.${uriCameraCapture.split(".").pop()}`,
                 type: `image/${uriCameraCapture.split(".").pop()}`
             })
-        console.log(uriCameraCapture);
+     
 
-        console.log("form data");
-        console.log(formData);
+   
 
         await api.post(`/Exame/Cadastrar`, formData, { headers: { "Content-Type": "multipart/form-data" } })
             .then((response) => { console.log(response.status), setDescricao(descricao + "\n" + response.data.descricao); setUserData({ ...userData, foto: uriCameraCapture }) })
             .catch((error) => console.log(error))
 
     }
+
+    useEffect(() => {
+        
+        GetInfoConsulta();
+        
+        
+    }, [])
 
     useEffect(() => {
 
@@ -101,22 +124,17 @@ export const PatientVisuRecord = ({ navigation, route }) => {
                 <ContainerScroll>
                     <BoxInput>
                         <TitleInput> Descrição da consulta </TitleInput>
-                        <InputBlock> O paciente possuí uma infecção no
-                            ouvido. Necessário repouse de 2 dias
-                            e acompanhamento médico constante </InputBlock>
+                        <InputBlock>{infoConsulta.descricao}</InputBlock>
                     </BoxInput>
 
                     <BoxInput>
                         <TitleInput> Diagnóstico do paciente </TitleInput>
-                        <InputBlock> Infecção no ouvido </InputBlock>
+                        <InputBlock>{infoConsulta.diagnostico}</InputBlock>
                     </BoxInput>
 
                     <BoxInput>
                         <TitleInput> Prescrição medica </TitleInput>
-                        <InputBlock> Medicamento: Advil
-                            Dosagem: 50 mg
-                            Frequência: 3 vezes ao dia
-                            Duração: 3 dias </InputBlock>
+                        <InputBlock> {medicamento} </InputBlock>
                     </BoxInput>
 
                     <BoxInput>

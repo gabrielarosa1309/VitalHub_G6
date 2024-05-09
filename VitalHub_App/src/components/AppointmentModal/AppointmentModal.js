@@ -66,6 +66,7 @@ const AppointmentModal = ({
                     <SelectBox>
                         <TitleInput> Qual é a localização desejada? </TitleInput>
                         <InputInsert
+                            onFocus={onfocus}
                             placeholder="Informe a localização"
                             value={agendamento ? agendamento.localizacao : null}
                             onChangeText={(txt) => setAgendamento({
