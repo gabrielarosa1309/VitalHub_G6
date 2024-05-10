@@ -47,6 +47,9 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
         setDescricao(infoConsulta.data.descricao)
         setDiagnostico(infoConsulta.data.diagnostico)
         setPrescricao(infoConsulta.data.receita.medicamento)
+
+    
+      
         
     }
 
@@ -120,7 +123,9 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
        descricao: descricao,
        diagnostico: diagnostico})
 
-       
+       if (infoConsulta.situacao.situacao === "Pendentes") {
+        await api.put(`/Consultas/Status?idConsulta=${route.params.idConsulta}&status=Realizados`)
+    }
     };
 
 

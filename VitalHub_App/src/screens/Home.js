@@ -78,7 +78,10 @@ export const Home = ({ navigation }) => {
     }, [dataConsulta, showModalCancel])
 
     function MostrarModal(modal, consulta) {
-        setConsultaSelecionada(consulta)
+        if (profile.role == "Paciente") {
+            setConsultaSelecionada(consulta)
+        }
+        
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
@@ -128,14 +131,14 @@ export const Home = ({ navigation }) => {
                         <PatientAppCard
                             situacao={item.situacao.situacao}
                             navigation={navigation}
-
+                            
                             roleUsuario={profile.role}
                             dataConsulta={item.dataConsulta}
                             prioridade={item.prioridade.prioridade}
                             usuarioConsulta={profile.role == "Medico" ? item.paciente : item.medicoClinica.medico}
                             time={item.dataConsulta}
 
-                            onPressMedModal={() => MostrarModal('prontuario', item)}
+                            onPressMedModal={() => profile.role == "Paciente" ? MostrarModal('prontuario', item) : navigation.replace("InsertMedRecord", {idConsulta : item.id}) }
                             onPressCancel={() => { MostrarModal('cancelar', item), setPutId(item.id)}}
                             onPressPront={() => {profile.role == "Medico" ? navigation.replace("InsertMedRecord", {idConsulta : item.id}) : navigation.replace("PatientVisuRecord", {idConsulta : item.id}) }}
                         />
