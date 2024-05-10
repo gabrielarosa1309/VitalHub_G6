@@ -9,7 +9,13 @@ import SetPassword from "./src/screens/SetPassword";
 import VerifyEmail from "./src/screens/VerifyEmail";
 import SelectClinic from "./src/screens/SelectClinic";
 import SelectDoctor from "./src/screens/SelectDoctor";
-import PatientProfile from "./src/screens/PatientProfile";
+import Profile from "./src/screens/Profile";
+import SelectDate from "./src/screens/SelectDate";
+import InsertMedRecord from "./src/screens/InsertMedRecord";
+import Location from "./src/screens/Location";
+import MedPatientRecord from "./src/screens/MedPatientRecord";
+import PatientVisuRecord from "./src/screens/PatientVisuRecord";
+import { Main } from "./src/screens/Main/Main";
 
 //instância do StackNavigator
 const Stack = createNativeStackNavigator();
@@ -17,13 +23,6 @@ const Stack = createNativeStackNavigator();
 //import das fonts
 import { useFonts, MontserratAlternates_700Bold, MontserratAlternates_600SemiBold, MontserratAlternates_500Medium } from "@expo-google-fonts/montserrat-alternates";
 import { Quicksand_400Regular, Quicksand_500Medium, Quicksand_600SemiBold, Quicksand_700Bold } from "@expo-google-fonts/quicksand";
-import SelectDate from "./src/screens/SelectDate";
-import InsertMedRecord from "./src/screens/InsertMedRecord";
-import Location from "./src/screens/Location";
-import MedPatientRecord from "./src/screens/MedPatientRecord";
-import EditPatientProfile from "./src/screens/EditPatientProfile";
-import PatientVisuRecord from "./src/screens/PatientVisuRecord";
-import { Main } from "./src/screens/Main/Main";
 
 export default function App() {
 
@@ -109,9 +108,9 @@ export default function App() {
         />
 
         <Stack.Screen
-          name="PatientProfile" //nome da tela
-          component={PatientProfile} //componente q será chamado
-          options={{ title: 'PatientProfile' }} //titulo da tela
+          name="Profile" //nome da tela
+          component={Profile} //componente q será chamado
+          options={{ title: 'Profile' }} //titulo da tela
         />
 
         <Stack.Screen

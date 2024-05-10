@@ -7,7 +7,7 @@ const BottomTab = createBottomTabNavigator();
 
 //Importar as telas
 import Home from "../Home";
-import PatientProfile from "../PatientProfile";
+import Profile from "../Profile";
 
 export const Main = () => {
     return (
@@ -59,7 +59,7 @@ export const Main = () => {
 
             <BottomTab.Screen
                 name="Perfil"
-                component={PatientProfile}
+                component={Profile}
             />
 
         </BottomTab.Navigator>
