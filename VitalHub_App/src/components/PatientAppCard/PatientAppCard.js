@@ -56,6 +56,7 @@ export const PatientAppCard = ({
             <TextBold>{prioridade == 0 ? "Rotina" : prioridade == 1 ? "Exame" : "Rotina"}</TextBold>
           </ProfileData>
         </DataProfileCard>
+        
 
         <ViewRow>
           <ClockCard situacao={situacao}>

@@ -12,9 +12,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text, Alert } from "react-native";
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('chewie@email.com')
-    const [senha, setSenha] = useState('gabi123')
-    const [errorMessage, setErrorMessage] = useState('');
+    const [email, setEmail] = useState('henrique@gmail.com')
+    const [senha, setSenha] = useState('123456')
+    const [errorMessage, setErrorMessage] = useState(''); 
 
     // Função para validar o e-mail
     const validateEmail = (email) => {
@@ -74,6 +74,7 @@ export const Login = ({ navigation }) => {
             <Title> Entrar ou criar conta </Title>
 
             <Input
+               
                 placeholder="Usuário ou E-mail"
                 value={email}
                 onChangeText={(txt) => setEmail(txt)}

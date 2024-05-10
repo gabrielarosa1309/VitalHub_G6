@@ -17,6 +17,12 @@ export const PatientProfile = ({ navigation }) => {
     const [uriCameraCapture, setsetUriCameraCapture] = useState(null) //Traz da camera o caminho da imagem por meio da funcao de capturar a foto
     const [open, setOpen] = useState(false)
 
+    //Chamada da api GET para pegar as informacoes iniciais do usuario cadastrado
+    const [userApiData, setUserApiData] = useState()
+
+
+  
+
     async function LogOut() {
         await AsyncStorage.removeItem('token')
         navigation.navigate('Login')
@@ -68,9 +74,9 @@ export const PatientProfile = ({ navigation }) => {
         
             profileLoad();
             
-            
+    
         }, [])
-        
+ 
         useEffect(() => {
         if (profileData) {
             EditLoad()
