@@ -168,7 +168,6 @@ export const Home = ({ navigation }) => {
                 visible={showModalApp}
                 setShowModalApp={setShowModalApp}
                 navigation={navigation}
-
             />
 
         </Container>

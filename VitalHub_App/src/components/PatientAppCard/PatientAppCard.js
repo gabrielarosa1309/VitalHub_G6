@@ -29,9 +29,7 @@ export const PatientAppCard = ({
   onPressPront
 }) => {
   const [showMedModal, setShowMedModal] = useState(false);
-
-
-
+  
   return (
     // container principal
     <ContainerCardsList>
@@ -51,7 +49,7 @@ export const PatientAppCard = ({
       {/* conteúdo ao lado da imagem de perfil */}
       <ContentCard>
         <DataProfileCard>
-          <ProfileName>Dr. Claudio</ProfileName>
+          <ProfileName>{usuarioConsulta.idNavigation.nome}</ProfileName>
 
           <ProfileData>
             <TextAge>{roleUsuario == "Medico" ? usuarioConsulta.dataNascimento : usuarioConsulta.crm}</TextAge>
