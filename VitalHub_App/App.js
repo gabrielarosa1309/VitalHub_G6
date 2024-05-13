@@ -126,12 +126,6 @@ export default function App() {
         />
 
         <Stack.Screen
-          name="EditPatientProfile" //nome da tela
-          component={EditPatientProfile} //componente q será chamado
-          options={{ title: 'EditPatientProfile' }} //titulo da tela
-        />
-
-        <Stack.Screen
           name="InsertMedRecord" //nome da tela
           component={InsertMedRecord} //componente q será chamado
           options={{ title: 'InsertMedRecord' }} //titulo da tela
