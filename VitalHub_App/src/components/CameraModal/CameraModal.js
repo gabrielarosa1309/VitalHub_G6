@@ -22,7 +22,7 @@ const CameraModal = ({
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null) //capturar foto ou selecionada da galeria
-    const [cameraType, setCameraType] = useState("front")
+    const [cameraType, setCameraType] = useState('front')
     const [openModal, setOpenModal] = useState(false)
     const [latestFoto, setLatestFoto] = useState(null)
     const [permission, requestPermission] = useCameraPermissions();
@@ -103,7 +103,7 @@ if (assets.length > 0) {
                 >
 
                     <View style={styles.viewFlip}>
-                        <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType = "front" ? "back" : "front")}>
+                        <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType === "front" ? "back" : "front")}>
                             <Text style={styles.txtFlip}>Trocar</Text>
                         </TouchableOpacity>
                     </View>

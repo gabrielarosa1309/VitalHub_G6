@@ -24,6 +24,7 @@ export const PatientVisuRecord = ({ navigation, route }) => {
     const [infoConsulta, setInfoConsulta] = useState([])
     const [userData, setUserData] = useState({});
     const [medicamento, setMedicamento] = useState('');
+    const [descricao, setDescricao] = useState('');
  
     async function GetInfoConsulta() {
 
@@ -39,7 +40,6 @@ export const PatientVisuRecord = ({ navigation, route }) => {
           setMedicamento(infoConsulta.data.receita.medicamento)
         
     }
-
 
     // async function OcrPost() {
 

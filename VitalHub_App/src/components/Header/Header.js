@@ -26,7 +26,7 @@ export const Header = ({
 
         <GradientBackground>
             <HomeHeader>
-                <BoxUser onPress={() => navigation.navigate("PatientProfile")}>
+                <BoxUser onPress={() => navigation.navigate("Profile")}>
                     <UserIcon source={img} />
                     <View>
                         <TextHome>Bem-vindo</TextHome>
