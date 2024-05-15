@@ -48,9 +48,8 @@ namespace WebAPI.Controllers
                     return NotFound();
                 }
 
-                var connectionString = "DefaultEndpointsProtocol=https;AccountName=blobvitalhub06;AccountKey=MX4hkXdgYNtK2dlsrYTlP+efSxEWDcRr3hsn3JN4fKafwe6pSHRVUsjQOE+R7mYpW6flLZ5FZVwo+AStN62lCw==;EndpointSuffix=core.windows.net";
-
                 var containerName = "vitalcontainer06";
+                var connectionString = "DefaultEndpointsProtocol=https;AccountName=blobvitalhub06;AccountKey=MX4hkXdgYNtK2dlsrYTlP+efSxEWDcRr3hsn3JN4fKafwe6pSHRVUsjQOE+R7mYpW6flLZ5FZVwo+AStN62lCw==;EndpointSuffix=core.windows.net";
 
                 string fotoUrl = await AzureBlobStorageHelper.UploadImageBlobAsync(form.Arquivo!, connectionString!, containerName!);
 
