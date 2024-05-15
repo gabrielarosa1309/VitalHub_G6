@@ -89,7 +89,7 @@ export const Login = ({ navigation }) => {
                 style={errorMessage ? { borderColor: 'red' } : {}}
             />
 
-            <LinkMedium onPress={() => navigation.navigate("ResetPassword")}>
+            <LinkMedium onPress={() => navigation.replace("ResetPassword", {email: email})}>
                 Esqueceu sua senha?
             </LinkMedium>
 

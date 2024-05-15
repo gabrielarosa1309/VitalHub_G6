@@ -30,6 +30,9 @@ export const Profile = ({ navigation }) => {
     const [crm, setCrm] = useState("");
 
 
+    //state para receber a imagem do blobstorage via API
+    const [profileImage, setProfileImage] = useState("")
+
 
     // Função que carrega o perfil do usuário
     async function profileLoad() {
@@ -45,6 +48,21 @@ export const Profile = ({ navigation }) => {
         await AsyncStorage.removeItem('token')
         navigation.navigate('Login')
     }
+
+    async function ListUserById() {
+
+        await api.get(`/Usuario/BuscarPorId?id=${userData.user}`)
+            .then(response => {
+
+
+                setProfileImage(response.data.foto);
+             
+
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+
 
     // Função para pegar os dados do usuário
     async function getProfile(token) {
@@ -133,6 +151,8 @@ export const Profile = ({ navigation }) => {
             setEndereco(profileData.endereco.logradouro);
             setCep(profileData.endereco.cep);
             setCidade(profileData.endereco.cidade);
+            setCrm(profileData.crm);
+            setEspecialidade(profileData.especialidade);
         }
     }, [edicao, profileData]);
 
@@ -142,6 +162,12 @@ export const Profile = ({ navigation }) => {
             AlterarFotoPerfil()
         }
     }, [uriCameraCapture])
+
+    useEffect(() => {
+
+        ListUserById();
+
+    }, [userData, profileImage])
 
     return (
         <Container>
@@ -157,7 +183,8 @@ export const Profile = ({ navigation }) => {
                     (
                         <>
                             <ContainerImage>
-                                <ImgProfile source={{ uri: uriCameraCapture }} />
+                                <ImgProfile source={profileImage == "" ? {uri: 'carregando'} : {uri : profileImage}} />
+
                                 <ButtonCamera
                                     onPress={() => { setOpen(true) }}
                                 >

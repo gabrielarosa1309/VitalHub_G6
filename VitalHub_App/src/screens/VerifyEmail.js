@@ -28,7 +28,8 @@ function focusPrevInput(index) {
 
 async function ValidarCod()
 {
-    await api.post(`/RecuperarSenha/ValidarCodigo?email=${route.params.email}&codigo=${codigo}`)
+   
+    await api.post(`/RecuperarSenha/ValidarCodigoRecuperacaoSenha?email=${route.params.email}&codigo=${codigo}`)
     .then(() => {navigation.replace("SetPassword", {emailP: route.params.email}) })
     .catch(error => {console.log(error)})
 
