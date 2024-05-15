@@ -13,6 +13,7 @@ import MedModal from "../components/MedModal/MedModal";
 import { userDecodeToken } from "../utils/auth/auth";
 import moment from "moment";
 import api from "../Service/Service";
+import { ImgProfile } from "../components/ImgProfile/Style";
 
 export const Home = ({ navigation }) => {
     const [profile, setProfile] = useState({})
@@ -25,6 +26,7 @@ export const Home = ({ navigation }) => {
     const [consultas, setConsultas] = useState([]);
     const [time, setTime] = useState('');
     const [consultaSelecionada, setConsultaSelecionada] = useState('');
+    const [profileImage, setProfileImage] = useState("")
 
     //State para armazenar informacoes dos cards para atualizar os status
     const [putId, setPutId] = useState("");
@@ -38,13 +40,29 @@ export const Home = ({ navigation }) => {
         }
     }
 
+
+
     async function ListarConsultas() {
         const url = (profile.role == 'Medico' ? "Medicos" : "Pacientes")
 
         await api.get(`/${url}/BuscarPorData?data=${dataConsulta}&id=${profile.user}`)
             .then(response => {
                 setConsultas(response.data);
-                
+
+            }).catch(error => {
+                console.log(error);
+            })
+    }
+    //Funcao para pegar a foto  do DB e atualizar no local
+    async function ListUserById() {
+
+        await api.get(`/Usuario/BuscarPorId?id=${profile.user}`)
+            .then(response => {
+
+
+                setProfileImage(response.data.foto);
+             
+
             }).catch(error => {
                 console.log(error);
             })
@@ -64,12 +82,18 @@ export const Home = ({ navigation }) => {
 
     useEffect(() => {
 
-    profileLoad(); 
-        
-       
-    
-        
+    profileLoad();
+
+
+
+
     }, [])
+
+    useEffect(() => {
+
+        ListUserById();
+
+    }, [profile, profileImage])
 
     useEffect(() => {
         if (dataConsulta != '') {
@@ -81,7 +105,7 @@ export const Home = ({ navigation }) => {
         if (profile.role == "Paciente") {
             setConsultaSelecionada(consulta)
         }
-        
+
 
         if (modal == 'cancelar') {
             setShowModalCancel(true)
@@ -92,8 +116,9 @@ export const Home = ({ navigation }) => {
 
     return (
         <Container>
+           
             <Header
-                img={require("../assets/img/chewie.jpg")}
+                img={{ ...profileImage == "" ? {uri: 'carregando'} : {uri : profileImage} }}
                 name={info.name}
                 navigation={navigation}
             />
@@ -131,7 +156,7 @@ export const Home = ({ navigation }) => {
                         <PatientAppCard
                             situacao={item.situacao.situacao}
                             navigation={navigation}
-                            
+
                             roleUsuario={profile.role}
                             dataConsulta={item.dataConsulta}
                             prioridade={item.prioridade.prioridade}

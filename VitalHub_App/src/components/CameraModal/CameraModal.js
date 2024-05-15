@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Image, Alert } from 'react-native';
 
 //1- instanciar a camera
-import { Camera, CameraType } from 'expo-camera';
+
 import { useEffect, useState, useRef } from 'react';
 import { FontAwesome } from "@expo/vector-icons"
 import * as MediaLibrary from "expo-media-library"
@@ -12,6 +12,8 @@ import * as ImagePicker from 'expo-image-picker'
 
 
 import { LastPhoto } from './Style';
+import { CameraView, useCameraPermissions } from 'expo-camera';
+
 
 
 
@@ -20,9 +22,10 @@ const CameraModal = ({
 }) => {
     const cameraRef = useRef(null);
     const [photo, setPhoto] = useState(null) //capturar foto ou selecionada da galeria
-    const [cameraType, setCameraType] = useState(Camera.Constants.Type.front)
+    const [cameraType, setCameraType] = useState('front')
     const [openModal, setOpenModal] = useState(false)
     const [latestFoto, setLatestFoto] = useState(null)
+    const [permission, requestPermission] = useCameraPermissions();
 
     async function CapturePhoto() {
         if (cameraRef) {
@@ -77,8 +80,10 @@ if (assets.length > 0) {
 
     useEffect(() => {
         (async () => {
-            const { status: cameraStatus } = await Camera.requestCameraPermissionsAsync()
-
+            if (permission && !permission.granted){
+            // const { status: cameraStatus } = await CameraView.requestCameraPermissionsAsync()
+            await requestPermission();
+            }
             const { status: mediaStatus } = await MediaLibrary.requestPermissionsAsync()
         })();
 
@@ -90,21 +95,20 @@ if (assets.length > 0) {
         <Modal>
             <View style={styles.container}>
                 {/* 2- chamando a camera */}
-                <Camera
+                <CameraView
                     ref={cameraRef}
-                    type={cameraType}
+                    facing={cameraType}
                     style={styles.camera}
-
                     ratio={'16:9'}
                 >
 
                     <View style={styles.viewFlip}>
-                        <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType == CameraType.front ? CameraType.back : CameraType.front)}>
+                        <TouchableOpacity style={styles.btnFlip} onPress={() => setCameraType(cameraType === "front" ? "back" : "front")}>
                             <Text style={styles.txtFlip}>Trocar</Text>
                         </TouchableOpacity>
                     </View>
 
-                </Camera>
+                </CameraView>
 
                 <View style={styles.alignButtons}>
                     <TouchableOpacity

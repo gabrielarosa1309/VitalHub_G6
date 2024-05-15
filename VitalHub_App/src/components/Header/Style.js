@@ -8,7 +8,7 @@ export const HomeHeader = styled.View`
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 160px;
+  gap: 130px;
 `
 
 export const BoxUser = styled.TouchableOpacity.attrs({

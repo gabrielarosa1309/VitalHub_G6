@@ -34,6 +34,7 @@ export const Profile = ({ navigation }) => {
         getProfile(data)
     }
 
+
     // Função que desloga o usuário
     async function LogOut() {
         await AsyncStorage.removeItem('token')
@@ -128,6 +129,7 @@ export const Profile = ({ navigation }) => {
     useEffect(() => {
         if (uriCameraCapture) {
             AlterarFotoPerfil()
+        
         }
     }, [uriCameraCapture])
 
@@ -145,7 +147,7 @@ export const Profile = ({ navigation }) => {
                     (
                         <>
                             <ContainerImage>
-                                <ImgProfile source={require("../assets/img/chewie.jpg")} />
+                                <ImgProfile source={{uri : uriCameraCapture}} />
 
                                 <ButtonCamera
                                     onPress={() => { setOpen(true) }}
