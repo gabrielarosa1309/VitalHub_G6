@@ -126,6 +126,8 @@ export const InsertMedRecord = ({navigation, route, editProp}) => {
        if (infoConsulta.situacao.situacao === "Pendentes") {
         await api.put(`/Consultas/Status?idConsulta=${route.params.idConsulta}&status=Realizados`)
     }
+
+    navigation.navigate("Home")
     };
 
 

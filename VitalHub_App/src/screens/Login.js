@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Text, Alert } from "react-native";
 
 export const Login = ({ navigation }) => {
-    const [email, setEmail] = useState('henrique@gmail.com')
+    const [email, setEmail] = useState('henriquebayer8@gmail.com')
     const [senha, setSenha] = useState('123456')
     const [errorMessage, setErrorMessage] = useState(''); 
 
@@ -89,7 +89,7 @@ export const Login = ({ navigation }) => {
                 style={errorMessage ? { borderColor: 'red' } : {}}
             />
 
-            <LinkMedium onPress={() => navigation.navigate("ResetPassword")}>
+            <LinkMedium onPress={() => navigation.replace("ResetPassword", {email: email})}>
                 Esqueceu sua senha?
             </LinkMedium>
 
