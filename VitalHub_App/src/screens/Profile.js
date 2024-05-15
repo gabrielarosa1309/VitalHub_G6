@@ -10,6 +10,7 @@ import { userDecodeToken } from "../utils/auth/auth";
 import CameraModal from "../components/CameraModal/CameraModal";
 import api from "../Service/Service";
 import moment from "moment";
+import { Masks, useMaskedInputProps } from 'react-native-mask-input';
 
 export const Profile = ({ navigation }) => {
     const [openModal, setOpenModal] = useState(false)
@@ -25,15 +26,19 @@ export const Profile = ({ navigation }) => {
     const [endereco, setEndereco] = useState("");
     const [cep, setCep] = useState("");
     const [cidade, setCidade] = useState("");
+    const [especialidade, setEspecialidade] = useState("");
+    const [crm, setCrm] = useState("");
+
 
 
     // Função que carrega o perfil do usuário
     async function profileLoad() {
         const data = await userDecodeToken();
-        setUserData(data)
-        getProfile(data)
+        if (data) {
+            setUserData(data)
+            getProfile(data)
+        }
     }
-
 
     // Função que desloga o usuário
     async function LogOut() {
@@ -55,27 +60,38 @@ export const Profile = ({ navigation }) => {
 
     // Função que altera os dados do usuário
     async function handleSave(token) {
-        const updatedData = {
-            dataNascimento : dataNasc,
-            cpf : cpf,
-            endereco : {
-                logradouro : endereco,
-                cep : cep,
-                cidade : cidade
-            },
-        };
+        let updatedData;
+        if (token.role === 'Medico') {
+            updatedData = {
+                especialidade: especialidade,
+                crm: crm,
+                endereco: {
+                    logradouro: endereco,
+                    cep: cep,
+                    cidade: cidade
+                },
+            };
+        } else {
+            updatedData = {
+                dataNascimento: dataNasc,
+                cpf: cpf,
+                endereco: {
+                    logradouro: endereco,
+                    cep: cep,
+                    cidade: cidade
+                },
+            };
+        }
 
         const url = (token.role == 'Medico' ? "Medicos" : "Pacientes")
 
         await api.put(`/${url}?idUsuario=${userData.user}`, updatedData)
-        .then((response) => {
-            console.log(response.status);
-            setProfileData({ ...profileData, ...updatedData });
-
-            // Depois testar aqui oq ta no handleSave comentado junto com esse state
-            setEdicao(false);
-        })
-        .catch((error) => console.log(error));
+            .then((response) => {
+                console.log(response.status);
+                setProfileData({ ...profileData, ...updatedData });
+                setEdicao(false);
+            })
+            .catch((error) => console.log(error));
     }
 
     // Função que altera a foto de perfil do usuário
@@ -99,16 +115,11 @@ export const Profile = ({ navigation }) => {
         setEdicao(true);
     };
 
-    // // Salva os dados que foram editados
-    // const handleSave = () => {
-    //     // lógica para salvar os dados
-    //     setDataNasc("");
-    //     setCpf("");
-    //     setEndereco("");
-    //     setCep("");
-    //     setCidade("");
-    //     setEdicao(false);
-    // };
+    const dataMasked = useMaskedInputProps({
+        value: dataNasc,
+        onChangeText: setDataNasc,
+        mask: Masks.DATE_DDMMYYYY
+    });
 
     // Effects
     useEffect(() => {
@@ -117,7 +128,7 @@ export const Profile = ({ navigation }) => {
 
     useEffect(() => {
         if (edicao) {
-            setDataNasc(moment(profileData.dataNascimento).format("DD/MM/YYYY"));
+            setDataNasc(profileData.dataNascimento);
             setCpf(profileData.cpf);
             setEndereco(profileData.endereco.logradouro);
             setCep(profileData.endereco.cep);
@@ -129,7 +140,6 @@ export const Profile = ({ navigation }) => {
     useEffect(() => {
         if (uriCameraCapture) {
             AlterarFotoPerfil()
-        
         }
     }, [uriCameraCapture])
 
@@ -147,8 +157,7 @@ export const Profile = ({ navigation }) => {
                     (
                         <>
                             <ContainerImage>
-                                <ImgProfile source={{uri : uriCameraCapture}} />
-
+                                <ImgProfile source={{ uri: uriCameraCapture }} />
                                 <ButtonCamera
                                     onPress={() => { setOpen(true) }}
                                 >
@@ -164,107 +173,219 @@ export const Profile = ({ navigation }) => {
                             <Title> {userData.name} </Title>
                             <Subtitle> {userData.email} </Subtitle>
 
-                            <ContainerScroll>
+                            {userData.role == "Paciente" ?
+                                (
+                                    <>
+                                        <ContainerScroll>
 
-                                {/* Data de nascimento */}
-                                <BoxInput>
-                                    <TitleInput> Data de nascimento </TitleInput>
+                                            {/* Data de nascimento */}
+                                            <BoxInput>
+                                                <TitleInput> Data de nascimento </TitleInput>
 
-                                    {edicao ? (
-                                        <InputInsert
-                                            placeholder="Insira sua data de nascimento"
-                                            value={dataNasc}
-                                            onChangeText={setDataNasc}
-                                        />
-                                    ) : (
-                                        <InputBlock>
-                                            {moment(profileData.dataNascimento).format("DD/MM/YYYY")}
-                                        </InputBlock>
-                                    )}
-                                </BoxInput>
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        {...dataMasked}
+                                                        keyboardType="numeric"
+                                                        placeholder="Insira sua data de nascimento"
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {dataNasc}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
 
-                                {/* CPF */}
-                                <BoxInput>
-                                    <TitleInput> CPF </TitleInput>
+                                            {/* CPF */}
+                                            <BoxInput>
+                                                <TitleInput> CPF </TitleInput>
 
-                                    {edicao ? (
-                                        <InputInsert
-                                            placeholder="Insira o CPF"
-                                            value={cpf}
-                                            onChangeText={setCpf}
-                                        />
-                                    ) : (
-                                        <InputBlock>
-                                            {profileData.cpf}
-                                        </InputBlock>
-                                    )}
-                                </BoxInput>
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        placeholder="Insira o CPF"
+                                                        value={cpf}
+                                                        onChangeText={setCpf}
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {profileData.cpf}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
 
-                                {/* Endereço */}
-                                <BoxInput>
-                                    <TitleInput> Endereço </TitleInput>
+                                            {/* Endereço */}
+                                            <BoxInput>
+                                                <TitleInput> Endereço </TitleInput>
 
-                                    {edicao ? (
-                                        <InputInsert
-                                            placeholder="Insira o endereço"
-                                            value={endereco}
-                                            onChangeText={setEndereco}
-                                        />
-                                    ) : (
-                                        <InputBlock>
-                                            {profileData.endereco.logradouro}
-                                        </InputBlock>
-                                    )}
-                                </BoxInput>
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        placeholder="Insira o endereço"
+                                                        value={endereco}
+                                                        onChangeText={setEndereco}
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {profileData.endereco.logradouro}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
 
-                                {/* CEP e cidade */}
-                                <DirectionRow>
-                                    {/* Cep */}
-                                    <BoxInputRow>
-                                        <TitleInput> Cep </TitleInput>
+                                            {/* CEP e cidade */}
+                                            <DirectionRow>
+                                                {/* Cep */}
+                                                <BoxInputRow>
+                                                    <TitleInput> Cep </TitleInput>
 
-                                        {edicao ? (
-                                            <InputInsert
-                                                placeholder="Insira o CEP"
-                                                value={cep}
-                                                onChangeText={setCep}
-                                            />
-                                        ) : (
-                                            <InputBodyRow>
-                                                {profileData.endereco.cep}
-                                            </InputBodyRow>
-                                        )}
-                                    </BoxInputRow>
+                                                    {edicao ? (
+                                                        <InputInsert
+                                                            placeholder="Insira o CEP"
+                                                            value={cep}
+                                                            onChangeText={setCep}
+                                                        />
+                                                    ) : (
+                                                        <InputBodyRow>
+                                                            {profileData.endereco.cep}
+                                                        </InputBodyRow>
+                                                    )}
+                                                </BoxInputRow>
 
-                                    {/* Cidade */}
-                                    <BoxInputRow>
-                                        <TitleInput> Cidade </TitleInput>
+                                                {/* Cidade */}
+                                                <BoxInputRow>
+                                                    <TitleInput> Cidade </TitleInput>
 
-                                        {edicao ? (
-                                            <InputInsert
-                                                placeholder="Insira a cidade"
-                                                value={cidade}
-                                                onChangeText={setCidade}
-                                            />
-                                        ) : (
-                                            <InputBodyRow>
-                                                {profileData.endereco.cidade}
-                                            </InputBodyRow>
-                                        )}
-                                    </BoxInputRow>
-                                </DirectionRow>
+                                                    {edicao ? (
+                                                        <InputInsert
+                                                            placeholder="Insira a cidade"
+                                                            value={cidade}
+                                                            onChangeText={setCidade}
+                                                        />
+                                                    ) : (
+                                                        <InputBodyRow>
+                                                            {profileData.endereco.cidade}
+                                                        </InputBodyRow>
+                                                    )}
+                                                </BoxInputRow>
+                                            </DirectionRow>
 
-                                <Button onPress={edicao ? handleSave : handleEdit}>
-                                    <ButtonTxt>{edicao ? 'Salvar' : 'Editar'}</ButtonTxt>
-                                </Button>
+                                            <Button onPress={edicao ? handleSave : handleEdit}>
+                                                <ButtonTxt>{edicao ? 'Salvar' : 'Editar'}</ButtonTxt>
+                                            </Button>
 
-                                <Button onPress={() => LogOut()}>
-                                    <ButtonTxt> Sair </ButtonTxt>
-                                </Button>
+                                            <Button onPress={() => LogOut()}>
+                                                <ButtonTxt> Sair </ButtonTxt>
+                                            </Button>
 
-                                {openModal ? (<CameraModal getMediaLibrary={true} />) : (<></>)}
+                                            {openModal ? (<CameraModal getMediaLibrary={true} />) : (<></>)}
 
-                            </ContainerScroll>
+                                        </ContainerScroll>
+                                    </>
+                                )
+                                :
+                                (
+                                    <>
+                                        <ContainerScroll>
+
+                                            {/* Especialidade */}
+                                            <BoxInput>
+                                                <TitleInput> Especialidade </TitleInput>
+
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        placeholder="Insira a especialidade"
+                                                        value={especialidade}
+                                                        onChangeText={setEspecialidade}
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {profileData.crm}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
+
+                                            {/* CRM */}
+                                            <BoxInput>
+                                                <TitleInput> CRM </TitleInput>
+
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        placeholder="Insira o CRM"
+                                                        value={crm}
+                                                        onChangeText={setCrm}
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {profileData.crm}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
+
+                                            {/* Endereço */}
+                                            <BoxInput>
+                                                <TitleInput> Endereço </TitleInput>
+
+                                                {edicao ? (
+                                                    <InputInsert
+                                                        placeholder="Insira o endereço"
+                                                        value={endereco}
+                                                        onChangeText={setEndereco}
+                                                    />
+                                                ) : (
+                                                    <InputBlock>
+                                                        {profileData.endereco.logradouro}
+                                                    </InputBlock>
+                                                )}
+                                            </BoxInput>
+
+                                            {/* CEP e cidade */}
+                                            <DirectionRow>
+                                                {/* Cep */}
+                                                <BoxInputRow>
+                                                    <TitleInput> Cep </TitleInput>
+
+                                                    {edicao ? (
+                                                        <InputInsert
+                                                            placeholder="Insira o CEP"
+                                                            value={cep}
+                                                            onChangeText={setCep}
+                                                        />
+                                                    ) : (
+                                                        <InputBodyRow>
+                                                            {profileData.endereco.cep}
+                                                        </InputBodyRow>
+                                                    )}
+                                                </BoxInputRow>
+
+                                                {/* Cidade */}
+                                                <BoxInputRow>
+                                                    <TitleInput> Cidade </TitleInput>
+
+                                                    {edicao ? (
+                                                        <InputInsert
+                                                            placeholder="Insira a cidade"
+                                                            value={cidade}
+                                                            onChangeText={setCidade}
+                                                        />
+                                                    ) : (
+                                                        <InputBodyRow>
+                                                            {profileData.endereco.cidade}
+                                                        </InputBodyRow>
+                                                    )}
+                                                </BoxInputRow>
+                                            </DirectionRow>
+
+                                            <Button onPress={edicao ? handleSave : handleEdit}>
+                                                <ButtonTxt>{edicao ? 'Salvar' : 'Editar'}</ButtonTxt>
+                                            </Button>
+
+                                            <Button onPress={() => LogOut()}>
+                                                <ButtonTxt> Sair </ButtonTxt>
+                                            </Button>
+
+                                            {openModal ? (<CameraModal getMediaLibrary={true} />) : (<></>)}
+
+                                        </ContainerScroll>
+                                    </>
+                                )
+                            }
                         </>
                     )
                     :
