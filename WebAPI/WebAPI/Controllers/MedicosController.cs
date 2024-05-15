@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm] MedicoViewModel medicoModel)
+        public async Task<IActionResult> Post([FromBody] MedicoViewModel medicoModel)
         {
             try
             {
@@ -109,13 +109,13 @@ namespace WebAPI.Controllers
             }
         }
 
-        [Authorize]
-        [HttpPut("Atualizar Perfil")]
-        public IActionResult AtualizarPerfil(MedicoViewModel medico)
+        
+        [HttpPut]
+        public IActionResult AtualizarPerfil(Guid idUsuario, MedicoViewModel medico)
         {
             try
             {
-                Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
+                //Guid idUsuario = Guid.Parse(HttpContext.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Jti).Value);
 
                 return Ok(_medicoRepository.AtualizarPerfil(idUsuario, medico));
 

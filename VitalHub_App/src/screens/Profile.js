@@ -26,7 +26,6 @@ export const Profile = ({ navigation }) => {
     const [endereco, setEndereco] = useState("");
     const [cep, setCep] = useState("");
     const [cidade, setCidade] = useState("");
-    const [especialidade, setEspecialidade] = useState("");
     const [crm, setCrm] = useState("");
 
 
@@ -37,6 +36,7 @@ export const Profile = ({ navigation }) => {
     // Função que carrega o perfil do usuário
     async function profileLoad() {
         const data = await userDecodeToken();
+
         if (data) {
             setUserData(data)
             getProfile(data)
@@ -53,11 +53,7 @@ export const Profile = ({ navigation }) => {
 
         await api.get(`/Usuario/BuscarPorId?id=${userData.user}`)
             .then(response => {
-
-
                 setProfileImage(response.data.foto);
-             
-
             }).catch(error => {
                 console.log(error);
             })
@@ -74,14 +70,16 @@ export const Profile = ({ navigation }) => {
             }).catch(error => {
                 console.log(error);
             })
+
+        console.log(token.role);
     }
 
     // Função que altera os dados do usuário
-    async function handleSave(token) {
-        let updatedData;
-        if (token.role === 'Medico') {
+    async function handleSave() {
+        let updatedData = null;
+
+        if (userData.role == 'Medico') {
             updatedData = {
-                especialidade: especialidade,
                 crm: crm,
                 endereco: {
                     logradouro: endereco,
@@ -101,16 +99,17 @@ export const Profile = ({ navigation }) => {
             };
         }
 
-        const url = (token.role == 'Medico' ? "Medicos" : "Pacientes")
+        const url = (userData.role == 'Medico' ? "Medicos" : "Pacientes");
 
-        await api.put(`/${url}?idUsuario=${userData.user}`, updatedData)
-            .then((response) => {
-                console.log(response.status);
-                setProfileData({ ...profileData, ...updatedData });
-                setEdicao(false);
-            })
-            .catch((error) => console.log(error));
+        try {
+            const response = await api.put(`/${url}?idUsuario=${userData.user}`, updatedData);
+            setProfileData({ ...profileData, ...updatedData });
+            setEdicao(false);
+        } catch (error) {
+            console.log(error);
+        }
     }
+
 
     // Função que altera a foto de perfil do usuário
     async function AlterarFotoPerfil() {
@@ -152,7 +151,6 @@ export const Profile = ({ navigation }) => {
             setCep(profileData.endereco.cep);
             setCidade(profileData.endereco.cidade);
             setCrm(profileData.crm);
-            setEspecialidade(profileData.especialidade);
         }
     }, [edicao, profileData]);
 
@@ -183,7 +181,7 @@ export const Profile = ({ navigation }) => {
                     (
                         <>
                             <ContainerImage>
-                                <ImgProfile source={profileImage == "" ? {uri: 'carregando'} : {uri : profileImage}} />
+                                <ImgProfile source={profileImage == "" ? { uri: 'carregando' } : { uri: profileImage }} />
 
                                 <ButtonCamera
                                     onPress={() => { setOpen(true) }}
@@ -310,24 +308,6 @@ export const Profile = ({ navigation }) => {
                                 (
                                     <>
                                         <ContainerScroll>
-
-                                            {/* Especialidade */}
-                                            <BoxInput>
-                                                <TitleInput> Especialidade </TitleInput>
-
-                                                {edicao ? (
-                                                    <InputInsert
-                                                        placeholder="Insira a especialidade"
-                                                        value={especialidade}
-                                                        onChangeText={setEspecialidade}
-                                                    />
-                                                ) : (
-                                                    <InputBlock>
-                                                        {profileData.crm}
-                                                    </InputBlock>
-                                                )}
-                                            </BoxInput>
-
                                             {/* CRM */}
                                             <BoxInput>
                                                 <TitleInput> CRM </TitleInput>
