@@ -61,6 +61,7 @@ export const Home = ({ navigation }) => {
 
 
                 setProfileImage(response.data.foto);
+                setProfile({ ...profile, foto: response.data.foto })
              
 
             }).catch(error => {
@@ -118,7 +119,7 @@ export const Home = ({ navigation }) => {
         <Container>
            
             <Header
-                img={{ ...profileImage == "" ? {uri: 'carregando'} : {uri : profileImage} }}
+                img={{ ...profileImage == "" ? {uri: 'carregando'} : {uri : profile.foto} }}
                 name={info.name}
                 navigation={navigation}
             />
